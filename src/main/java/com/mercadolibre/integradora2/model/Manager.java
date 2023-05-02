@@ -1,11 +1,11 @@
-package model;
+package com.mercadolibre.integradora2.model;
 
 import java.util.ArrayList;
 
-public class Controller {
+public class Manager {
     private ArrayList<Product> products;
 
-    public Controller() {
+    public Manager() {
         this.products = new ArrayList<>();
     }
 

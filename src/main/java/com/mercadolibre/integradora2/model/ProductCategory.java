@@ -1,4 +1,4 @@
-package model;
+package com.mercadolibre.integradora2.model;
 
 public enum ProductCategory {
     BOOKS,
