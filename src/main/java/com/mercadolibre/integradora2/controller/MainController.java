@@ -12,5 +12,6 @@ public class MainController {
     @FXML
     protected void onHelloButtonClick() {
         welcomeText.setText(manager.readData());
+        manager.writeData();
     }
 }

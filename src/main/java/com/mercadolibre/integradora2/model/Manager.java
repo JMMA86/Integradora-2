@@ -1,6 +1,7 @@
 package com.mercadolibre.integradora2.model;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import com.google.gson.Gson;
@@ -38,17 +39,17 @@ public class Manager {
             BufferedReader prodReader = new BufferedReader(new InputStreamReader(prod));
             BufferedReader ordsReader = new BufferedReader(new InputStreamReader(ords));
             String line;
-            StringBuilder json = new StringBuilder();
+            String json = "";
             while ((line = prodReader.readLine()) != null) {
-                json.append(line);
+                json += line;
             }
-            Product[] jsonProducts = gson.fromJson(String.valueOf(json), Product[].class);
+            Product[] jsonProducts = gson.fromJson(json, Product[].class);
             this.products.addAll(Arrays.asList(jsonProducts));
-            json.setLength(0);
+            json = "";
             while ((line = ordsReader.readLine()) != null) {
-                json.append(line);
+                json += line;
             }
-            Order[] jsonOrders = gson.fromJson(String.valueOf(json), Order[].class);
+            Order[] jsonOrders = gson.fromJson(json, Order[].class);
             this.orders.addAll(Arrays.asList(jsonOrders));
         } catch (FileNotFoundException e) {
             msj = "Data not found. System will save changes from this session.";
@@ -56,6 +57,30 @@ public class Manager {
             //e.printStackTrace();
         }
         return msj;
+    }
+
+    /**
+     * This method saves products and orders data to JSON files in the project "data" folder.
+     * It will allow persistence in the system use.
+     */
+    public void writeData() {
+        File projectDir = new File(System.getProperty("user.dir"));
+        File products = new File(projectDir+"/data/products.json");
+        File orders = new File(projectDir+"/data/orders.json");
+
+        Gson gson = new Gson();
+        String jsonProducts = gson.toJson(this.products);
+        String jsonOrders = gson.toJson(this.orders);
+        try {
+            FileOutputStream fosProducts = new FileOutputStream(products);
+            FileOutputStream fosOrders = new FileOutputStream(orders);
+            fosProducts.write(jsonProducts.getBytes(StandardCharsets.UTF_8));
+            fosOrders.write(jsonOrders.getBytes(StandardCharsets.UTF_8));
+            fosProducts.close();
+            fosOrders.close();
+        } catch (IOException e){
+            //e.printStackTrace();
+        }
     }
 
     public void addProduct(String name, String description, double price, int amount, int category, int timesBought) throws IndexOutOfBoundsException {
