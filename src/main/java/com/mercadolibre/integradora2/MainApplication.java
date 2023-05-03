@@ -9,6 +9,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class MainApplication extends Application {
+
     @Override
     public void start(Stage stage) {
         renderView("main-view.fxml", 400, 300);
