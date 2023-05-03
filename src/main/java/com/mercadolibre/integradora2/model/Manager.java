@@ -59,6 +59,10 @@ public class Manager {
         return msj;
     }
 
+    /**
+     * This method saves products and orders data to JSON files in the project "data" folder.
+     * It will allow persistence in the system use.
+     */
     public void writeData() {
         File projectDir = new File(System.getProperty("user.dir"));
         File products = new File(projectDir+"/data/products.json");
