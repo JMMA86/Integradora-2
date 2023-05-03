@@ -1,5 +1,6 @@
 package com.mercadolibre.integradora2;
 
+import com.mercadolibre.integradora2.model.Manager;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -15,6 +16,7 @@ public class MainApplication extends Application {
     }
 
     public static void main(String[] args) {
+        Manager.readData();
         launch();
     }
 
