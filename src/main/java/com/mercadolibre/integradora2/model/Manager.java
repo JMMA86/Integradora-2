@@ -1,11 +1,11 @@
 package com.mercadolibre.integradora2.model;
 
+import com.google.gson.Gson;
+
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.Arrays;
-import com.google.gson.Gson;
 
 public class Manager {
     private ArrayList<Product> products;
@@ -108,14 +108,14 @@ public class Manager {
 
     public Product searchProduct(int amount) {
         Searcher<Integer> bs = new Searcher<>();
-        Integer[] amounts = products.stream().mapToInt(Product::getAmount).sorted().toArray(Integer[]::new);
+        Integer[] amounts = products.stream().mapToInt(Product::getAmount).sorted().boxed().toArray(Integer[]::new);
         int pos = bs.binarySearch(amounts, amount, 0, products.size() - 1, false);
         return products.get(pos);
     }
 
     public Product searchProduct(double price) {
         Searcher<Double> bs = new Searcher<>();
-        Double[] prices = products.stream().mapToDouble(Product::getPrice).sorted().toArray(Double[]::new);
+        Double[] prices = products.stream().mapToDouble(Product::getPrice).sorted().boxed().toArray(Double[]::new);
         int pos = bs.binarySearch(prices, price, 0, products.size() - 1, false);
         return products.get(pos);
     }
