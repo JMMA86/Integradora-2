@@ -21,7 +21,7 @@ public class Manager {
      * Products and orders will be loaded to the system.
      */
     public String readData() {
-        String msj = "Both files loaded successfully.";
+        String msj = "Files loaded successfully.";
         Gson gson = new Gson();
 
         File projectDir = new File(System.getProperty("user.dir"));
