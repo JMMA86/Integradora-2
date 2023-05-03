@@ -10,10 +10,9 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class MainApplication extends Application {
-    private final Manager manager = new Manager();
+
     @Override
     public void start(Stage stage) {
-        manager.readData();
         renderView("main-view.fxml", 400, 300);
     }
 

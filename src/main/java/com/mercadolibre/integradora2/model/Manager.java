@@ -19,7 +19,8 @@ public class Manager {
      * the method will create it.
      * Products and orders will be loaded to the system.
      */
-    public void readData() {
+    public String readData() {
+        String msj = "Both files loaded successfully.";
         Gson gson = new Gson();
 
         File projectDir = new File(System.getProperty("user.dir"));
@@ -50,10 +51,11 @@ public class Manager {
             Order[] jsonOrders = gson.fromJson(String.valueOf(json), Order[].class);
             this.orders.addAll(Arrays.asList(jsonOrders));
         } catch (FileNotFoundException e) {
-            //e.printStackTrace();
+            msj = "Data not found. System will save changes from this session.";
         } catch (IOException e){
             //e.printStackTrace();
         }
+        return msj;
     }
 
     public void addProduct(String name, String description, double price, int amount, int category, int timesBought) throws IndexOutOfBoundsException {
