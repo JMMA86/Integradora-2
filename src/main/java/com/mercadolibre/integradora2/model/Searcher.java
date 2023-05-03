@@ -5,50 +5,50 @@ import java.util.Arrays;
 import java.util.Comparator;
 
 public class Searcher <T extends Comparable<T>> {
-    public static void main(String[] args) {
-//        Searcher<Integer> bs = new Searcher<>();
-        Searcher<Double> bs = new Searcher<>();
-        Searcher<String> bsStr = new Searcher<>();
-
-        ArrayList<Product> products = new ArrayList<>();
-        products.add(new Product("CocaCola","soda", 133, 4, 5, 0));
-        products.add(new Product("Pepsi","Soda", 100.5, 2, 1, 0));
-        products.add(new Product("Pepsi1","Soda", 102.5, 3, 2, 0));
-        products.add(new Product("Pepsi2","Soda", 101.5, 6, 3, 0));
-        products.add(new Product("Pepsi3","Soda", 100.5, 8, 4, 0));
-
-        products.sort(Comparator.comparing( (Product p) -> new StringBuilder(p.getName()).reverse().toString()));
-//            products.sort(Comparator.comparingInt(Product::getTimesSold));
-        //products.sort(Comparator.comparingDouble(Product::getPrice));
-        //            Integer[] arr2 = products.stream().mapToInt(Product::getTimesSold).boxed().toArray(Integer[]::new);
-        Double[] arr2 = products.stream().mapToDouble(Product::getPrice).boxed().toArray(Double[]::new);
-
-        String[] arr3 = products.stream().map(Product::getName).map(str -> new StringBuilder(str).reverse().toString()).toArray(String[]::new);
-        // Arrays.sort(arr3);
-
-        System.out.println(Arrays.toString(arr3));
-        int[] rangeStr = bsStr.searchByRange(arr3, "i", "n");
-        System.out.println(rangeStr[0] + ", " + rangeStr[1]);
-
-        // int result = bs.binarySearch(arr2, 100.5, 1, arr2.length - 1, false);
-
-        // System.out.println(products.get(result).getName());
-
-        // int[] range = bs.searchByRange(arr2, 10.5,3000.5);
-
-        /*
-        System.out.println(String.format("Range: (%d, %d):", range[0], range[1]));
-        for(int i=range[0]; i<=range[1]; i++) {
-            System.out.println( String.format("%s (%f)", products.get(i).getName(), products.get(i).getPrice()));
-        }
-         *
-         */
-
-        System.out.println(String.format("Range: (%d, %d):", rangeStr[0], rangeStr[1]));
-        for(int i=rangeStr[0]; i<=rangeStr[1]; i++) {
-            System.out.println( String.format("%s (%f)", products.get(i).getName(), products.get(i).getPrice()));
-        }
-    }
+//    public static void main(String[] args) {
+////        Searcher<Integer> bs = new Searcher<>();
+//        Searcher<Double> bs = new Searcher<>();
+//        Searcher<String> bsStr = new Searcher<>();
+//
+//        ArrayList<Product> products = new ArrayList<>();
+//        products.add(new Product("CocaCola","soda", 133, 4, 5, 0));
+//        products.add(new Product("Pepsi","Soda", 100.5, 2, 1, 0));
+//        products.add(new Product("Pepsi1","Soda", 102.5, 3, 2, 0));
+//        products.add(new Product("Pepsi2","Soda", 101.5, 6, 3, 0));
+//        products.add(new Product("Pepsi3","Soda", 100.5, 8, 4, 0));
+//
+//        products.sort(Comparator.comparing( (Product p) -> new StringBuilder(p.getName()).reverse().toString()));
+////            products.sort(Comparator.comparingInt(Product::getTimesSold));
+//        //products.sort(Comparator.comparingDouble(Product::getPrice));
+//        //            Integer[] arr2 = products.stream().mapToInt(Product::getTimesSold).boxed().toArray(Integer[]::new);
+//        Double[] arr2 = products.stream().mapToDouble(Product::getPrice).boxed().toArray(Double[]::new);
+//
+//        String[] arr3 = products.stream().map(Product::getName).map(str -> new StringBuilder(str).reverse().toString()).toArray(String[]::new);
+//        // Arrays.sort(arr3);
+//
+//        System.out.println(Arrays.toString(arr3));
+//        int[] rangeStr = bsStr.searchByRange(arr3, "i", "n");
+//        System.out.println(rangeStr[0] + ", " + rangeStr[1]);
+//
+//        // int result = bs.binarySearch(arr2, 100.5, 1, arr2.length - 1, false);
+//
+//        // System.out.println(products.get(result).getName());
+//
+//        // int[] range = bs.searchByRange(arr2, 10.5,3000.5);
+//
+//        /*
+//        System.out.println(String.format("Range: (%d, %d):", range[0], range[1]));
+//        for(int i=range[0]; i<=range[1]; i++) {
+//            System.out.println( String.format("%s (%f)", products.get(i).getName(), products.get(i).getPrice()));
+//        }
+//         *
+//         */
+//
+//        System.out.println(String.format("Range: (%d, %d):", rangeStr[0], rangeStr[1]));
+//        for(int i=rangeStr[0]; i<=rangeStr[1]; i++) {
+//            System.out.println( String.format("%s (%f)", products.get(i).getName(), products.get(i).getPrice()));
+//        }
+//    }
 
     public int[] searchByRange(T[] arr, T lt, T rt) {
         int l_approx = binarySearch(arr, lt, 0, arr.length-1, true);

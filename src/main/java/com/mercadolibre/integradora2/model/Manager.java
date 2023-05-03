@@ -94,7 +94,7 @@ public class Manager {
 
 
     /**
-     * THis function searches a product by its name along the products array
+     * This function searches a product by its name along the products array
      *
      * @param name The product's name to be searched
      * @return The product searched by the user
