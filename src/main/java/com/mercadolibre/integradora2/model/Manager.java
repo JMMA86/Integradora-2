@@ -120,12 +120,16 @@ public class Manager {
         return result.toArray(Product[]::new);
     }
 
-    public Product searchProductByPrice(double price) {
+    public Product[] searchProductByPrice(double price) {
         Searcher<Double> bs = new Searcher<>();
         products.sort(Comparator.comparingDouble(Product::getPrice));
         Double[] prices = products.stream().mapToDouble(Product::getPrice).boxed().toArray(Double[]::new);
-        int pos = bs.binarySearch(prices, price, 0, products.size() - 1, false);
-        return products.get(pos);
+        int[] indexes = bs.searchByRange(prices, price, price);
+        ArrayList<Product> result = new ArrayList<>();
+        for (int i = indexes[0]; i <= indexes[1]; i++) {
+            result.add(products.get(i));
+        }
+        return result.toArray(Product[]::new);
     }
 
     public Product[] searchProductsByCategory(ProductCategory productCategory) {

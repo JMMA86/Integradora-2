@@ -1,5 +1,12 @@
 package com.mercadolibre.integradora2.model;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+import java.util.function.Function;
+
 public class Searcher<T extends Comparable<T>> {
     /**
      * This method searches by range using the binary search method.
