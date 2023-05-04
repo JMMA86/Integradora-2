@@ -2,19 +2,12 @@ package com.mercadolibre.integradora2.controller;
 
 import com.mercadolibre.integradora2.MainApplication;
 import com.mercadolibre.integradora2.model.Manager;
-import com.mercadolibre.integradora2.model.Product;
-import com.mercadolibre.integradora2.model.ProductCategory;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.stage.Stage;
-import java.util.Arrays;
 
 public class MainController {
-    private final Manager manager = new Manager();
-    @FXML
-    private Label welcomeText;
 
     @FXML
     private Button startSystemBtn;
@@ -23,10 +16,10 @@ public class MainController {
     protected void onStartBtn() {
         Stage stage = (Stage) startSystemBtn.getScene().getWindow();
         stage.close();
-        String msj = manager.readData();
+        String msj = MainApplication.getManager().readData();
         if (msj.equals("Files loaded successfully.")) {
             MainApplication.showAlert("Log info", msj, Alert.AlertType.INFORMATION);
         }
-        MainApplication.renderView("management-view.fxml", 720, 480);
+        MainApplication.renderView("management-view.fxml", "Management System", 720, 480);
     }
 }

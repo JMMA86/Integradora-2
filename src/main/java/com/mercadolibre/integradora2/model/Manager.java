@@ -87,9 +87,7 @@ public class Manager {
 
     public void addProduct(String name, String description, double price, int amount, int category, int timesBought) throws IndexOutOfBoundsException {
         Product newProduct = new Product(name, description, price, amount, category, timesBought);
-
         // TODO: look for repeated product
-
         products.add(newProduct);
     }
 
