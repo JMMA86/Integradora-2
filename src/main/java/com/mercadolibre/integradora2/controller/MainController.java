@@ -19,7 +19,10 @@ public class MainController {
     protected void onStartBtn() {
         Stage stage = (Stage) startSystemBtn.getScene().getWindow();
         stage.close();
-        MainApplication.showAlert("Log info", manager.readData(), Alert.AlertType.INFORMATION);
+        String msj = manager.readData();
+        if (msj.equals("Files loaded successfully.")) {
+            MainApplication.showAlert("Log info", msj, Alert.AlertType.INFORMATION);
+        }
         MainApplication.renderView("management-view.fxml", 720, 480);
     }
 }

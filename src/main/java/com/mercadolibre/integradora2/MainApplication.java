@@ -24,7 +24,7 @@ public class MainApplication extends Application {
             FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource(fxml));
             Stage stage = new Stage();
             Scene scene = new Scene(fxmlLoader.load(), width, height);
-            stage.setTitle("Plane Boarding Control");
+            stage.setTitle("Mercado Libre");
             stage.setScene(scene);
             stage.setResizable(false);
             stage.show();
