@@ -22,7 +22,7 @@ public class MainController {
         manager.addProduct("Cocacola6","Hola",  111, 2, 3, 5);
         manager.addProduct("Cocacola7","Hola",  111, 4, 3, 0);
         manager.addProduct("Cocacola4","Hola",  115, 6, 4, 4);
-        Product[] result = manager.searchProductByAmount(3);
+        Product[] result = manager.searchProductByAmount(7, 7);
         for (Product mx : result) {
             System.out.println(mx.getName());
         }

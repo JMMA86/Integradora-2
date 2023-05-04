@@ -1,10 +1,7 @@
 package com.mercadolibre.integradora2.model;
 
 import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.function.Function;
 
 public class Searcher<T extends Comparable<T>> {
@@ -27,9 +24,11 @@ public class Searcher<T extends Comparable<T>> {
      * @param rt  The upper parameter to search by range.
      * @return An int array with the indexes where such elements can be found.
      */
-    public int[] searchByRange(T[] arr, T lt, T rt) {
+    public int[] searchByRange(T[] arr, T lt, T rt) throws NoSuchElementException {
         int l_approx = binarySearch(arr, lt, 0, arr.length - 1, true);
         int xl, xr;
+
+        if (l_approx >= arr.length) throw new NoSuchElementException("The element was not found");
 
         if (arr[l_approx].compareTo(lt) >= 0) {
             if (l_approx > 0 && arr[l_approx - 1].compareTo(lt) >= 0) {
@@ -42,6 +41,8 @@ public class Searcher<T extends Comparable<T>> {
         }
 
         int r_approx = binarySearch(arr, rt, xl, arr.length - 1, true);
+
+        if (r_approx >= arr.length) throw new NoSuchElementException("The element was not found");
 
         if (arr[r_approx].compareTo(rt) <= 0) {
             if (r_approx < arr.length - 1 && arr[r_approx + 1].compareTo(rt) <= 0) {
@@ -72,7 +73,7 @@ public class Searcher<T extends Comparable<T>> {
      * @return A single int representing the position of the element, if the element
      * is not found in the array, the method will return a -1
      */
-    public int binarySearch(T[] arr, T target, int l, int r, boolean range) {
+    public int binarySearch(T[] arr, T target, int l, int r, boolean range) throws NoSuchElementException {
         while (l <= r || range) {
             int m = l + (r - l) / 2;
             if (l > r) {
@@ -87,6 +88,7 @@ public class Searcher<T extends Comparable<T>> {
                 return m;
             }
         }
-        return -1;
+
+        throw new NoSuchElementException("The element was not found");
     }
 }
