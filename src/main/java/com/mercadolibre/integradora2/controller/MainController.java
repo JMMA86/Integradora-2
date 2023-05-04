@@ -2,16 +2,20 @@ package com.mercadolibre.integradora2.controller;
 
 import com.mercadolibre.integradora2.MainApplication;
 import com.mercadolibre.integradora2.model.Manager;
+import com.mercadolibre.integradora2.model.Product;
+import com.mercadolibre.integradora2.model.ProductCategory;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
+import java.util.Arrays;
 
 public class MainController {
     private final Manager manager = new Manager();
     @FXML
     private Label welcomeText;
+
     @FXML
     private Button startSystemBtn;
 
