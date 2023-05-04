@@ -1,8 +1,6 @@
 package com.mercadolibre.integradora2.model;
 
-import java.lang.reflect.Array;
-import java.util.*;
-import java.util.function.Function;
+import java.util.NoSuchElementException;
 
 public class Searcher<T extends Comparable<T>> {
     /**
