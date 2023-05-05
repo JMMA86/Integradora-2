@@ -36,13 +36,12 @@ public class MainApplication extends Application {
         }
     }
 
-    public static Optional<ButtonType> showAlert(String header, String content, Alert.AlertType type) {
+    public static void showAlert(String header, String content, Alert.AlertType type) {
         Alert alert = new Alert(type);
         alert.setTitle("Alert");
         alert.setHeaderText(header);
         alert.setContentText(content);
         alert.showAndWait();
-        return Optional.ofNullable(alert.getResult());
     }
 
     public static Manager getManager() {
