@@ -101,7 +101,7 @@ public class Manager {
      * @return The product searched by the user
      */
     public Product searchProduct(String name) throws NoSuchElementException {
-        Searcher<String> bs = new Searcher<>();
+        Searcher<String, Product> bs = new Searcher<>();
         products.sort(Comparator.comparing(Product::getName));
         String[] names = products.stream().map(Product::getName).toArray(String[]::new);
         int pos = bs.binarySearch(names, name, 0, products.size() - 1, false);
@@ -119,15 +119,10 @@ public class Manager {
      * @return A list with the products that matches those elements.
      */
     public Product[] searchProductByAmount(int lower, int upper) throws NoSuchElementException {
-        Searcher<Integer> bs = new Searcher<>();
+        Searcher<Integer, Product> bs = new Searcher<>();
         products.sort(Comparator.comparingInt(Product::getAmount));
         Integer[] amounts = products.stream().mapToInt(Product::getAmount).boxed().toArray(Integer[]::new);
-        int[] indexes = bs.searchByRange(amounts, lower, upper);
-        ArrayList<Product> result = new ArrayList<>();
-        for (int i = indexes[0]; i <= indexes[1]; i++) {
-            result.add(products.get(i));
-        }
-        return result.toArray(Product[]::new);
+        return bs.searchByRange(products, amounts, lower, upper).toArray(Product[]::new);
     }
 
     /**
@@ -141,15 +136,10 @@ public class Manager {
      * @return A list with the products between those ranges
      */
     public Product[] searchProductByPrice(double lower, double upper) throws NoSuchElementException {
-        Searcher<Double> bs = new Searcher<>();
+        Searcher<Double, Product> bs = new Searcher<>();
         products.sort(Comparator.comparingDouble(Product::getPrice));
         Double[] prices = products.stream().mapToDouble(Product::getPrice).boxed().toArray(Double[]::new);
-        int[] indexes = bs.searchByRange(prices, lower, upper);
-        ArrayList<Product> result = new ArrayList<>();
-        for (int i = indexes[0]; i <= indexes[1]; i++) {
-            result.add(products.get(i));
-        }
-        return result.toArray(Product[]::new);
+        return bs.searchByRange(products, prices, lower, upper).toArray(Product[]::new);
     }
 
     /**
@@ -164,15 +154,10 @@ public class Manager {
      * @throws NoSuchElementException When a category is not registered in any product.
      */
     public Product[] searchProductsByCategory(ProductCategory productCategory1, ProductCategory productCategory2) throws NoSuchElementException {
-        Searcher<Integer> bs = new Searcher<>();
+        Searcher<Integer, Product> bs = new Searcher<>();
         products.sort(Comparator.comparing(Product::getCategory));
         Integer[] categories = products.stream().map(Product::getCategory).map(ProductCategory::ordinal).toArray(Integer[]::new);
-        int[] indexes = bs.searchByRange(categories, productCategory1.ordinal(), productCategory2.ordinal());
-        ArrayList<Product> result = new ArrayList<>();
-        for (int i = indexes[0]; i <= indexes[1]; i++) {
-            result.add(products.get(i));
-        }
-        return result.toArray(Product[]::new);
+        return bs.searchByRange(products, categories, productCategory1.ordinal(), productCategory2.ordinal()).toArray(Product[]::new);
     }
 
     /**
@@ -187,15 +172,10 @@ public class Manager {
      *                                or when the upper limit is smaller than the smaller times bought in products.
      */
     public Product[] searchProductsByTimesBought(int lower, int upper) throws NoSuchElementException {
-        Searcher<Integer> bs = new Searcher<>();
+        Searcher<Integer, Product> bs = new Searcher<>();
         products.sort(Comparator.comparingInt(Product::getTimesBought));
         Integer[] times = products.stream().mapToInt(Product::getTimesBought).boxed().toArray(Integer[]::new);
-        int[] indexes = bs.searchByRange(times, lower, upper);
-        ArrayList<Product> result = new ArrayList<>();
-        for (int i = indexes[0]; i <= indexes[1]; i++) {
-            result.add(products.get(i));
-        }
-        return result.toArray(Product[]::new);
+        return bs.searchByRange(products, times, lower, upper).toArray(Product[]::new);
     }
 
     /**
@@ -214,7 +194,7 @@ public class Manager {
      * @return An array with the products between that range
      */
     public Product[] searchProductsBySuffix(String lower, String upper, boolean suffix) {
-        Searcher<String> bs = new Searcher<>();
+        Searcher<String, Product> bs = new Searcher<>();
         String[] names;
         StringBuilder temp;
 
@@ -238,12 +218,8 @@ public class Manager {
             products.sort(Comparator.comparing(Product::getName));
             names = products.stream().map(Product::getName).toArray(String[]::new);
         }
-        int[] indexes = bs.searchByRange(names, lower, upper);
-        ArrayList<Product> result = new ArrayList<>();
-        for (int i = indexes[0]; i <= indexes[1]; i++) {
-            result.add(products.get(i));
-        }
-        return result.toArray(Product[]::new);
+
+        return bs.searchByRange(products, names, lower, upper).toArray(Product[]::new);
     }
 
     public ArrayList<Product> getProducts() {
