@@ -34,11 +34,22 @@ __Completeness:__ = 3/7 = 0.429
 
 __Commit:__ 458cc27
 
-__Failure density:__ 0.2
+__Failure density:__ 1/5 = 0.2
 
-__Reliability:__ 0.8
+__Reliability:__ 1 - 1/5 = 0.8
 
 __Completeness:__ 5 / 7
 
 ---
+
+### __Iteration 3__
+
+__Commit:__ a08b4c5
+
+__Failure density:__ 0/7 = 0.0
+
+__Reliability:__ 1 - 0.0 =  1.0
+
+__Completeness:__ 7/7 = 1.0
+
 
