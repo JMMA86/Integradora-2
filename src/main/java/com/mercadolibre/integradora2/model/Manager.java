@@ -91,7 +91,6 @@ public class Manager {
         products.add(newProduct);
     }
 
-
     /**
      * This function searches a product by its name along the products array
      *
@@ -99,7 +98,7 @@ public class Manager {
      * @return The product searched by the user
      */
     public Product searchProduct(String name) throws NoSuchElementException {
-        Searcher<String> bs = new Searcher<>();
+        Searcher<String, Product> bs = new Searcher<>();
         products.sort(Comparator.comparing(Product::getName));
         String[] names = products.stream().map(Product::getName).toArray(String[]::new);
         int pos = bs.binarySearch(names, name, 0, products.size() - 1, false);
@@ -117,15 +116,10 @@ public class Manager {
      * @return A list with the products that matches those elements.
      */
     public Product[] searchProductByAmount(int lower, int upper) throws NoSuchElementException {
-        Searcher<Integer> bs = new Searcher<>();
+        Searcher<Integer, Product> bs = new Searcher<>();
         products.sort(Comparator.comparingInt(Product::getAmount));
         Integer[] amounts = products.stream().mapToInt(Product::getAmount).boxed().toArray(Integer[]::new);
-        int[] indexes = bs.searchByRange(amounts, lower, upper);
-        ArrayList<Product> result = new ArrayList<>();
-        for (int i = indexes[0]; i <= indexes[1]; i++) {
-            result.add(products.get(i));
-        }
-        return result.toArray(Product[]::new);
+        return bs.searchByRange(products, amounts, lower, upper).toArray(Product[]::new);
     }
 
     /**
@@ -134,44 +128,95 @@ public class Manager {
      * <p>
      * The lower limit cannot be grater thant the upper limit.
      *
-     * @param lower
-     * @param upper
-     * @return
+     * @param lower the lower limit to search
+     * @param upper the upper limit to search
+     * @return A list with the products between those ranges
      */
     public Product[] searchProductByPrice(double lower, double upper) throws NoSuchElementException {
-        Searcher<Double> bs = new Searcher<>();
+        Searcher<Double, Product> bs = new Searcher<>();
         products.sort(Comparator.comparingDouble(Product::getPrice));
         Double[] prices = products.stream().mapToDouble(Product::getPrice).boxed().toArray(Double[]::new);
-        int[] indexes = bs.searchByRange(prices, lower, upper);
-        ArrayList<Product> result = new ArrayList<>();
-        for (int i = indexes[0]; i <= indexes[1]; i++) {
-            result.add(products.get(i));
-        }
-        return result.toArray(Product[]::new);
+        return bs.searchByRange(products, prices, lower, upper).toArray(Product[]::new);
     }
 
+    /**
+     * This method search a product by a ProductCategory, the search
+     * is based on the ordinals of the category.
+     * <p>
+     * The productCategory1 ordinal must be smaller than the productCategory2 ordinal.
+     *
+     * @param productCategory1 The lower limit to search
+     * @param productCategory2 The upper limit to search
+     * @return An array filled with all the products with those categories
+     * @throws NoSuchElementException When a category is not registered in any product.
+     */
     public Product[] searchProductsByCategory(ProductCategory productCategory1, ProductCategory productCategory2) throws NoSuchElementException {
-        Searcher<Integer> bs = new Searcher<>();
+        Searcher<Integer, Product> bs = new Searcher<>();
         products.sort(Comparator.comparing(Product::getCategory));
         Integer[] categories = products.stream().map(Product::getCategory).map(ProductCategory::ordinal).toArray(Integer[]::new);
-        int[] indexes = bs.searchByRange(categories, productCategory1.ordinal(), productCategory2.ordinal());
-        ArrayList<Product> result = new ArrayList<>();
-        for (int i = indexes[0]; i <= indexes[1]; i++) {
-            result.add(products.get(i));
-        }
-        return result.toArray(Product[]::new);
+        return bs.searchByRange(products, categories, productCategory1.ordinal(), productCategory2.ordinal()).toArray(Product[]::new);
     }
 
+    /**
+     * This function search a product by the times it was bought.
+     * <p>
+     * The lower limit must be smaller
+     *
+     * @param lower The lower limit to search
+     * @param upper The upper limit to search
+     * @return An array of products between the limits specified.
+     * @throws NoSuchElementException When the lower limit is bigger than the biggest times bought in products
+     *                                or when the upper limit is smaller than the smaller times bought in products.
+     */
     public Product[] searchProductsByTimesBought(int lower, int upper) throws NoSuchElementException {
-        Searcher<Integer> bs = new Searcher<>();
+        Searcher<Integer, Product> bs = new Searcher<>();
         products.sort(Comparator.comparingInt(Product::getTimesBought));
         Integer[] times = products.stream().mapToInt(Product::getTimesBought).boxed().toArray(Integer[]::new);
-        int[] indexes = bs.searchByRange(times, lower, upper);
-        ArrayList<Product> result = new ArrayList<>();
-        for (int i = indexes[0]; i <= indexes[1]; i++) {
-            result.add(products.get(i));
+        return bs.searchByRange(products, times, lower, upper).toArray(Product[]::new);
+    }
+
+    /**
+     * This function search elements between a range given by Strings.
+     * It can search by prefixes or suffixes (Not both at the same time),
+     * the more letters are given to the searcher, the most accurate will be output.
+     * <p>
+     * The lower limit must be smaller than the upper limit taking on count the
+     * alphabetical order.
+     * <p>
+     * It doesn't matter the lengths of the Strings as the program will balance them
+     *
+     * @param lower  The lower limit detailed as a String
+     * @param upper  The upper limit detailed as a String
+     * @param suffix If the search will be performed with suffixes
+     * @return An array with the products between that range
+     */
+    public Product[] searchProductsByStrings(String lower, String upper, boolean suffix) throws NoSuchElementException {
+        Searcher<String, Product> bs = new Searcher<>();
+        String[] names;
+        StringBuilder temp;
+
+        //Making sure that both limits have the same length
+        if (lower.length() > upper.length()) {
+            temp = new StringBuilder(upper);
+            temp.setLength(lower.length());
+            upper = temp.toString();
+        } else {
+            temp = new StringBuilder(lower);
+            temp.setLength(upper.length());
+            lower = temp.toString();
         }
-        return result.toArray(Product[]::new);
+
+        if (suffix) {
+            lower = new StringBuilder(lower).reverse().toString();
+            upper = new StringBuilder(upper).reverse().toString();
+            products.sort(Comparator.comparing((Product p) -> new StringBuilder(p.getName()).reverse().toString()));
+            names = products.stream().map(Product::getName).map(str -> new StringBuilder(str).reverse().toString()).toArray(String[]::new);
+        } else {
+            products.sort(Comparator.comparing(Product::getName));
+            names = products.stream().map(Product::getName).toArray(String[]::new);
+        }
+
+        return bs.searchByRange(products, names, lower, upper).toArray(Product[]::new);
     }
 
     public ArrayList<Product> getProducts() {

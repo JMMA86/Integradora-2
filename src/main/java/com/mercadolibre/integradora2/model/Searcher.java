@@ -1,10 +1,9 @@
 package com.mercadolibre.integradora2.model;
 
-import java.lang.reflect.Array;
-import java.util.*;
-import java.util.function.Function;
+import java.util.ArrayList;
+import java.util.NoSuchElementException;
 
-public class Searcher<T extends Comparable<T>> {
+public class Searcher<T extends Comparable<T>, E> {
     /**
      * This method searches by range using the binary search method.
      * An array of an object that extends comparable must be given.
@@ -24,9 +23,10 @@ public class Searcher<T extends Comparable<T>> {
      * @param rt  The upper parameter to search by range.
      * @return An int array with the indexes where such elements can be found.
      */
-    public int[] searchByRange(T[] arr, T lt, T rt) throws NoSuchElementException {
-        int l_approx = binarySearch(arr, lt, 0, arr.length - 1, true);
+    public ArrayList<E> searchByRange(ArrayList<E> elements, T[] arr, T lt, T rt) throws NoSuchElementException {
         int xl, xr;
+
+        int l_approx = binarySearch(arr, lt, 0, arr.length - 1, true);
 
         if (l_approx >= arr.length) throw new NoSuchElementException("The element was not found");
 
@@ -44,7 +44,7 @@ public class Searcher<T extends Comparable<T>> {
 
         if (r_approx >= arr.length) throw new NoSuchElementException("The element was not found");
 
-        if (arr[r_approx].compareTo(rt) <= 0) {
+        if (rt.compareTo(arr[r_approx]) <= 0) {
             if (r_approx < arr.length - 1 && arr[r_approx + 1].compareTo(rt) <= 0) {
                 xr = r_approx + 1;
             } else {
@@ -54,7 +54,13 @@ public class Searcher<T extends Comparable<T>> {
             xr = r_approx - 1;
         }
 
-        return new int[]{xl, xr};
+        ArrayList<E> result = new ArrayList<>();
+
+        for (int i = xl; i <= xr; i++) {
+            result.add(elements.get(i));
+        }
+
+        return result;
     }
 
 
@@ -76,7 +82,7 @@ public class Searcher<T extends Comparable<T>> {
     public int binarySearch(T[] arr, T target, int l, int r, boolean range) throws NoSuchElementException {
         while (l <= r || range) {
             int m = l + (r - l) / 2;
-            if (l > r) {
+            if (l > r && range) {
                 return m;
             }
 
