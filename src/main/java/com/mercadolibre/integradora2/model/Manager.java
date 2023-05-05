@@ -9,8 +9,8 @@ import java.util.Comparator;
 import java.util.NoSuchElementException;
 
 public class Manager {
-    private ArrayList<Product> products;
-    private ArrayList<Order> orders;
+    private final ArrayList<Product> products;
+    private final ArrayList<Order> orders;
 
     public Manager() {
         this.products = new ArrayList<>();
@@ -41,17 +41,17 @@ public class Manager {
             BufferedReader prodReader = new BufferedReader(new InputStreamReader(prod));
             BufferedReader ordsReader = new BufferedReader(new InputStreamReader(ords));
             String line;
-            String json = "";
+            StringBuilder json = new StringBuilder();
             while ((line = prodReader.readLine()) != null) {
-                json += line;
+                json.append(line);
             }
-            Product[] jsonProducts = gson.fromJson(json, Product[].class);
+            Product[] jsonProducts = gson.fromJson(json.toString(), Product[].class);
             this.products.addAll(Arrays.asList(jsonProducts));
-            json = "";
+            json = new StringBuilder();
             while ((line = ordsReader.readLine()) != null) {
-                json += line;
+                json.append(line);
             }
-            Order[] jsonOrders = gson.fromJson(json, Order[].class);
+            Order[] jsonOrders = gson.fromJson(json.toString(), Order[].class);
             this.orders.addAll(Arrays.asList(jsonOrders));
         } catch (FileNotFoundException e) {
             msj = "Data not found. System will save changes from this session.";
