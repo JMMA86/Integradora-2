@@ -7,13 +7,15 @@ public class Order {
     private String customerName;
     private final ArrayList<Product> products;
     private final LocalDate DATE;
-    private double totalPrice;
+    private double totalPrice = 0;
 
-    public Order(String customerName) {
+    public Order(String customerName, ArrayList<Product> products) {
         this.customerName = customerName;
-        this.products = new ArrayList<>();
+        this.products = products;
         this.DATE = LocalDate.now();
-        this.totalPrice = 0;
+        for(Product p : products) {
+            totalPrice += p.getPrice();
+        }
     }
 
     public String getCustomerName() {
@@ -26,11 +28,6 @@ public class Order {
 
     public ArrayList<Product> getProducts() {
         return products;
-    }
-
-    public void addProduct(Product product) {
-        products.add(product);
-        totalPrice += product.getPrice();
     }
 
     public LocalDate getDATE() {

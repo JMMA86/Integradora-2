@@ -1,6 +1,8 @@
 package com.mercadolibre.integradora2.model;
 
 import com.google.gson.Gson;
+import com.mercadolibre.integradora2.exception.DuplicatedElementException;
+
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -85,12 +87,19 @@ public class Manager {
         }
     }
 
-    public void addProduct(String name, String description, double price, int amount, int category, int timesBought) throws IndexOutOfBoundsException {
+    public void addOrder(String customerName, ArrayList<Product> products) {
+        Order newOrder = new Order(customerName, products);
+        orders.add(newOrder);
+    }
+
+    public void addProduct(String name, String description, double price, int amount, int category, int timesBought) throws IndexOutOfBoundsException, DuplicatedElementException {
         Product newProduct = new Product(name, description, price, amount, category, timesBought);
-
-        // TODO: look for repeated product
-
-        products.add(newProduct);
+        try {
+            searchProduct(name);
+            throw new DuplicatedElementException("The product is already in the list");
+        } catch (NoSuchElementException e) {
+            products.add(newProduct);
+        }
     }
 
     /**
@@ -225,4 +234,7 @@ public class Manager {
         return products;
     }
 
+    public ArrayList<Order> getOrders() {
+        return orders;
+    }
 }

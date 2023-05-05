@@ -1,8 +1,7 @@
 package model;
 
-import com.mercadolibre.integradora2.model.Manager;
-import com.mercadolibre.integradora2.model.Product;
-import com.mercadolibre.integradora2.model.ProductCategory;
+import com.mercadolibre.integradora2.exception.DuplicatedElementException;
+import com.mercadolibre.integradora2.model.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -23,32 +22,52 @@ public class ManagerTest {
     }
 
     void setupScenario1() {
-        manager.addProduct("CocaCola", "Enjoy the sugar", 1.5, 50, 4, 10);
+        try {
+            manager.addProduct("CocaCola", "Enjoy the sugar", 1.5, 50, 4, 10);
+        } catch (DuplicatedElementException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     void setUpScenario2() {
-        manager.addProduct("CocaCola", "Enjoy the sugar", 1.5, 50, 4, 10);
-        manager.addProduct("PonyMalta", "For the sugar enjoyers", 2.0, 100, 4, 15);
-        manager.addProduct("The integrative task", "To suffer", 10.0, 2, 6, 15);
+        try {
+            manager.addProduct("CocaCola", "Enjoy the sugar", 1.5, 50, 4, 10);
+            manager.addProduct("PonyMalta", "For the sugar enjoyers", 2.0, 100, 4, 15);
+            manager.addProduct("The integrative task", "To suffer", 10.0, 2, 6, 15);
+        } catch (DuplicatedElementException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     void setUpScenario3() {
-        manager.addProduct("CocaCola", "Enjoy the sugar", 1.5, 50, 4, 10);
-        manager.addProduct("Pepsi", "Enjoy the sugar", 1.5, 50, 4, 10);
+        try {
+            manager.addProduct("CocaCola", "Enjoy the sugar", 1.5, 50, 4, 10);
+            manager.addProduct("Pepsi", "Enjoy the sugar", 1.5, 50, 4, 10);
+        } catch (DuplicatedElementException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     void setUpScenario4() {
-        manager.addProduct("Minecraft", "For the miners", 150.5, 100, 8, 150);
-        manager.addProduct("Lipstick", "Beauty", 150.5, 7, 7, 145);
+        try {
+            manager.addProduct("Minecraft", "For the miners", 150.5, 100, 8, 150);
+            manager.addProduct("Lipstick", "Beauty", 150.5, 7, 7, 145);
+        } catch (DuplicatedElementException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    // ADD PRODUCT METHOD
+    // Add product
 
     @Test
     void addProductValidData() {
         int limit = 10;
         for (int i = 0; i < limit; i++) {
-            manager.addProduct("SampleProduct" + i, "Enjoy the sugar", rnd.nextDouble(20), rnd.nextInt(10), rnd.nextInt(1, ProductCategory.values().length - 1), rnd.nextInt(10));
+            try {
+                manager.addProduct("SampleProduct" + i, "Enjoy the sugar", rnd.nextDouble(20), rnd.nextInt(10), rnd.nextInt(1, ProductCategory.values().length - 1), rnd.nextInt(10));
+            } catch (DuplicatedElementException e) {
+                throw new RuntimeException(e);
+            }
         }
         assertEquals(manager.getProducts().size(), limit);
     }
@@ -56,8 +75,7 @@ public class ManagerTest {
     @Test
     void addProductRepeatedData() {
         setupScenario1();
-        manager.addProduct("CocaCola", "Enjoy the sugar", 1.5, 50, 4, 10);
-        assertEquals(manager.getProducts().size(), 1);
+        assertThrows(DuplicatedElementException.class, () -> manager.addProduct("CocaCola", "Enjoy the sugar", 1.5, 50, 4, 10));
     }
 
     @Test
@@ -67,6 +85,23 @@ public class ManagerTest {
         assertThrows(IllegalArgumentException.class, () -> manager.addProduct("CocaCola", "Enjoy the sugar", -10, 50, 10, 10));
         assertThrows(IllegalArgumentException.class, () -> manager.addProduct("CocaCola", "Enjoy the sugar", 1.5, -10, 10, 10));
         assertThrows(IllegalArgumentException.class, () -> manager.addProduct("CocaCola", "Enjoy the sugar", 1.5, -10, 10, -10));
+    }
+
+    // Add order
+
+    @Test
+    void addOrderSingleProduct() {
+        setupScenario1();
+        manager.addOrder("Yuluka", manager.getProducts());
+        assertEquals(manager.getOrders().size(), 1);
+    }
+
+    @Test
+    void addOrderMultipleProducts() {
+        setUpScenario2();
+        manager.addOrder("Martin", manager.getProducts());
+        assertEquals(manager.getOrders().size(), 1);
+        assertEquals(manager.getOrders().get(0).getProducts().size(), manager.getProducts().size());
     }
 
     //Search
