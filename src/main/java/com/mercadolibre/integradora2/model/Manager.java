@@ -193,7 +193,7 @@ public class Manager {
      * @param suffix If the search will be performed with suffixes
      * @return An array with the products between that range
      */
-    public Product[] searchProductsBySuffix(String lower, String upper, boolean suffix) {
+    public Product[] searchProductsByStrings(String lower, String upper, boolean suffix) {
         Searcher<String, Product> bs = new Searcher<>();
         String[] names;
         StringBuilder temp;
