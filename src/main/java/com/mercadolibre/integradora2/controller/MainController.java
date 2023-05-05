@@ -3,32 +3,29 @@ package com.mercadolibre.integradora2.controller;
 import com.mercadolibre.integradora2.model.Manager;
 import com.mercadolibre.integradora2.model.Product;
 import com.mercadolibre.integradora2.model.ProductCategory;
+import com.mercadolibre.integradora2.MainApplication;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.stage.Stage;
+
+import java.util.Arrays;
 
 import java.util.Arrays;
 
 public class MainController {
     private final Manager manager = new Manager();
     @FXML
-    private Label welcomeText;
+    private Button startSystemBtn;
 
     @FXML
-    protected void onHelloButtonClick() {
-        manager.addProduct("Cocacola","Hola",  112, 2, 2, 3);
-        manager.addProduct("Cocacola5","Hola",  112, 1, 2, 3);
-        manager.addProduct("PonyMalta","Hola",  112, 1, 2, 3);
-        manager.addProduct("Cocacola5","Hola",  112, 1, 2, 3);
-        manager.addProduct("Cocacola2","Hola",  113, 2, 1, 2);
-        manager.addProduct("Cocacola3","Hola",  111, 3, 3, 1);
-        manager.addProduct("Cocacola6","Hola",  111, 2, 3, 5);
-        manager.addProduct("Cocacola7","Hola",  111, 4, 3, 0);
-        manager.addProduct("Cocacola4","Hola",  115, 6, 4, 4);
-        Product[] result = manager.searchProductsByStrings("Cocacola2", "Cocacola7", false);
-        for (Product mx : result) {
-            System.out.println(mx.getName());
+    protected void onStartBtn() {
+        Stage stage = (Stage) startSystemBtn.getScene().getWindow();
+        stage.close();
+        String msj = MainApplication.getManager().readData();
+        if (!msj.equals("Files loaded successfully.")) {
+            MainApplication.showAlert("Log info", msj, Alert.AlertType.INFORMATION);
         }
-//        welcomeText.setText(manager.readData());
-//        manager.writeData();
+        MainApplication.renderView("management-view.fxml", "Management System", 720, 480);
     }
 }

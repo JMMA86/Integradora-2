@@ -1,7 +1,6 @@
 package com.mercadolibre.integradora2.model;
 
 import com.google.gson.Gson;
-
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -24,15 +23,15 @@ public class Manager {
      * Products and orders will be loaded to the system.
      */
     public String readData() {
-        String msj = "Both files loaded successfully.";
+        String msj = "Files loaded successfully.";
         Gson gson = new Gson();
 
         File projectDir = new File(System.getProperty("user.dir"));
-        File dataDirectory = new File(projectDir + "/data");
-        File products = new File(projectDir + "/data/products.json");
-        File orders = new File(projectDir + "/data/orders.json");
+        File dataDirectory = new File(projectDir+"/data");
+        File products = new File(projectDir+"/data/products.json");
+        File orders = new File(projectDir+"/data/orders.json");
 
-        if (!dataDirectory.exists()) {
+        if(!dataDirectory.exists()){
             dataDirectory.mkdirs();
         }
 
@@ -56,7 +55,7 @@ public class Manager {
             this.orders.addAll(Arrays.asList(jsonOrders));
         } catch (FileNotFoundException e) {
             msj = "Data not found. System will save changes from this session.";
-        } catch (IOException e) {
+        } catch (IOException e){
             //e.printStackTrace();
         }
         return msj;
@@ -68,8 +67,8 @@ public class Manager {
      */
     public void writeData() {
         File projectDir = new File(System.getProperty("user.dir"));
-        File products = new File(projectDir + "/data/products.json");
-        File orders = new File(projectDir + "/data/orders.json");
+        File products = new File(projectDir+"/data/products.json");
+        File orders = new File(projectDir+"/data/orders.json");
 
         Gson gson = new Gson();
         String jsonProducts = gson.toJson(this.products);
@@ -81,7 +80,7 @@ public class Manager {
             fosOrders.write(jsonOrders.getBytes(StandardCharsets.UTF_8));
             fosProducts.close();
             fosOrders.close();
-        } catch (IOException e) {
+        } catch (IOException e){
             //e.printStackTrace();
         }
     }
