@@ -24,7 +24,7 @@ public class MainController {
         manager.addProduct("Cocacola6","Hola",  111, 2, 3, 5);
         manager.addProduct("Cocacola7","Hola",  111, 4, 3, 0);
         manager.addProduct("Cocacola4","Hola",  115, 6, 4, 4);
-        Product[] result = manager.searchProductsByStrings("lta", "ola6", true);
+        Product[] result = manager.searchProductsByStrings("Cocacola2", "Cocacola7", false);
         for (Product mx : result) {
             System.out.println(mx.getName());
         }

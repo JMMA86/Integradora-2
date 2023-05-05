@@ -44,7 +44,7 @@ public class Searcher<T extends Comparable<T>, E> {
 
         if (r_approx >= arr.length) throw new NoSuchElementException("The element was not found");
 
-        if (arr[r_approx].compareTo(rt) <= 0) {
+        if (rt.compareTo(arr[r_approx]) <= 0) {
             if (r_approx < arr.length - 1 && arr[r_approx + 1].compareTo(rt) <= 0) {
                 xr = r_approx + 1;
             } else {
@@ -82,7 +82,7 @@ public class Searcher<T extends Comparable<T>, E> {
     public int binarySearch(T[] arr, T target, int l, int r, boolean range) throws NoSuchElementException {
         while (l <= r || range) {
             int m = l + (r - l) / 2;
-            if (l > r) {
+            if (l > r && range) {
                 return m;
             }
 

@@ -1,10 +1,12 @@
 package model;
 
 import com.mercadolibre.integradora2.model.Manager;
+import com.mercadolibre.integradora2.model.Product;
 import com.mercadolibre.integradora2.model.ProductCategory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
 import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -22,6 +24,22 @@ public class ManagerTest {
 
     void setupScenario1() {
         manager.addProduct("CocaCola", "Enjoy the sugar", 1.5, 50, 4, 10);
+    }
+
+    void setUpScenario2() {
+        manager.addProduct("CocaCola", "Enjoy the sugar", 1.5, 50, 4, 10);
+        manager.addProduct("PonyMalta", "For the sugar enjoyers", 2.0, 100, 4, 15);
+        manager.addProduct("The integrative task", "To suffer", 10.0, 2, 6, 15);
+    }
+
+    void setUpScenario3() {
+        manager.addProduct("CocaCola", "Enjoy the sugar", 1.5, 50, 4, 10);
+        manager.addProduct("Pepsi", "Enjoy the sugar", 1.5, 50, 4, 10);
+    }
+
+    void setUpScenario4() {
+        manager.addProduct("Minecraft", "For the miners", 150.5, 100, 8, 150);
+        manager.addProduct("Lipstick", "Beauty", 150.5, 7, 7, 145);
     }
 
     // ADD PRODUCT METHOD
@@ -51,4 +69,27 @@ public class ManagerTest {
         assertThrows(IllegalArgumentException.class, () -> manager.addProduct("CocaCola", "Enjoy the sugar", 1.5, -10, 10, -10));
     }
 
+    //Search
+    @Test
+    void searchSingleProductByName() {
+        setupScenario1();
+
+        assertEquals(manager.getProducts().get(0), manager.searchProduct("CocaCola"));
+    }
+
+    @Test
+    void searchProductsByRange() {
+        setUpScenario2();
+        setUpScenario4();
+
+        Product[] result = manager.searchProductsByStrings("Co", "Po", false);
+
+        for (Product mx : result) {
+            System.out.println(mx.getName());
+        }
+
+        for (int i = 0; i < 4; i++) {
+            assertEquals(manager.getProducts().get(i), result[i]);
+        }
+    }
 }
