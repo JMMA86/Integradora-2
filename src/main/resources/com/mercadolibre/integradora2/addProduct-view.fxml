@@ -9,38 +9,38 @@
         <HBox alignment="CENTER" spacing="10">
             <VBox>
                 <Label text="Name:" />
-                <TextField fx:id="nameField" maxWidth="240" prefWidth="240" />
+                <TextField fx:id="nameField" maxWidth="240" prefWidth="240" onKeyTyped="#updateAddBtn"/>
             </VBox>
             <VBox>
                 <Label text="Price:" />
-                <TextField fx:id="priceField" maxWidth="120" prefWidth="120" />
+                <TextField fx:id="priceField" maxWidth="120" prefWidth="120" onKeyTyped="#updateAddBtn"/>
             </VBox>
             <VBox>
                 <Label text="Amount:" />
-                <TextField fx:id="amountField" maxWidth="120" prefWidth="120" />
+                <TextField fx:id="amountField" maxWidth="120" prefWidth="120" onKeyTyped="#updateAddBtn"/>
             </VBox>
         </HBox>
         <VBox spacing="10">
             <Label text="Description:" />
-            <TextArea fx:id="descriptionArea" maxWidth="500" prefHeight="100" prefWidth="500" />
+            <TextArea fx:id="descriptionArea" maxWidth="500" prefHeight="100" prefWidth="500" onKeyTyped="#updateAddBtn"/>
             <Label text="Category" />
             <HBox alignment="CENTER" spacing="30">
                 <VBox spacing="10">
-                    <RadioButton fx:id="books" mnemonicParsing="false" text="Books" onAction="#getCategory" >
+                    <RadioButton fx:id="books" mnemonicParsing="false" text="Books" onAction="#setCategory" >
                   <toggleGroup>
                      <ToggleGroup fx:id="categoryGroup" />
                   </toggleGroup></RadioButton>
-                    <RadioButton fx:id="food" mnemonicParsing="false" text="Food and Drinks" toggleGroup="$categoryGroup" onAction="#getCategory" />
-                    <RadioButton fx:id="care" mnemonicParsing="false" text="Personal Care" toggleGroup="$categoryGroup" onAction="#getCategory" />
+                    <RadioButton fx:id="food" mnemonicParsing="false" text="Food and Drinks" toggleGroup="$categoryGroup" onAction="#setCategory" />
+                    <RadioButton fx:id="care" mnemonicParsing="false" text="Personal Care" toggleGroup="$categoryGroup" onAction="#setCategory" />
                 </VBox>
                 <VBox spacing="10">
-                    <RadioButton fx:id="electronics" mnemonicParsing="false" text="Electronics" toggleGroup="$categoryGroup" onAction="#getCategory" />
-                    <RadioButton fx:id="stationery" mnemonicParsing="false" text="Stationery" toggleGroup="$categoryGroup" onAction="#getCategory" />
-                    <RadioButton fx:id="games" mnemonicParsing="false" text="Toys/games" toggleGroup="$categoryGroup" onAction="#getCategory" />
+                    <RadioButton fx:id="electronics" mnemonicParsing="false" text="Electronics" toggleGroup="$categoryGroup" onAction="#setCategory" />
+                    <RadioButton fx:id="stationery" mnemonicParsing="false" text="Stationery" toggleGroup="$categoryGroup" onAction="#setCategory" />
+                    <RadioButton fx:id="games" mnemonicParsing="false" text="Toys/games" toggleGroup="$categoryGroup" onAction="#setCategory" />
                 </VBox>
                 <VBox spacing="10">
-                    <RadioButton fx:id="clothes" mnemonicParsing="false" text="Clothes/Accessories" toggleGroup="$categoryGroup" onAction="#getCategory" />
-                    <RadioButton fx:id="sports" mnemonicParsing="false" text="Sports" toggleGroup="$categoryGroup" onAction="#getCategory" />
+                    <RadioButton fx:id="clothes" mnemonicParsing="false" text="Clothes/Accessories" toggleGroup="$categoryGroup" onAction="#setCategory" />
+                    <RadioButton fx:id="sports" mnemonicParsing="false" text="Sports" toggleGroup="$categoryGroup" onAction="#setCategory" />
                 </VBox>
             </HBox>
         </VBox>
