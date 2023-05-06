@@ -1,7 +1,6 @@
 package com.mercadolibre.integradora2.controller;
 
 import com.mercadolibre.integradora2.MainApplication;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -40,5 +39,9 @@ public class ManagementController {
     @FXML
     public void onStockBtn() {
         MainApplication.renderView("addStock-view.fxml", "Add Stock", 360, 240);
+    }
+    @FXML
+    public void onAddOrderBtn() {
+        MainApplication.renderView("addOrder-view.fxml", "Add Order", 400, 500);
     }
 }

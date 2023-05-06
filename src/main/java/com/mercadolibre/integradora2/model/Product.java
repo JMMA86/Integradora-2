@@ -75,6 +75,6 @@ public class Product {
         for (String word : words) {
             category.append(word.substring(0, 1).toUpperCase() + word.substring(1) + " ");
         }
-        return name + "\n- Price: " + price + "\n- Amount: " + amount + "\n- Category: " + category;
+        return name + "\n- Price: " + price + "\n- Amount: " + amount + "\n- Category: " + category + "\n- Description: " + description;
     }
 }

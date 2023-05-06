@@ -13,7 +13,7 @@
 
         <HBox spacing="10" alignment="CENTER">
             <Button fx:id="addProductBtn" text="Add product" onAction="#onAddProductBtn"/>
-            <Button fx:id="addOrderBtn" text="Add order"/>
+            <Button fx:id="addOrderBtn" text="Add order" onAction="#onAddOrderBtn"/>
             <Button fx:id="addStockBtn" text="Add stock" onAction="#onStockBtn"/>
             <Button fx:id="searchBtn" text="Search" />
             <Button fx:id="saveBtn" text="Save" onAction="#onSaveBtn"/>

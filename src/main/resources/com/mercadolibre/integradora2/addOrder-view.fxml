@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="500.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mercadolibre.integradora2.controller.AddOrderController">
+    <VBox alignment="CENTER" prefHeight="500.0" prefWidth="400.0" spacing="10">
+        <HBox alignment="CENTER" spacing="10">
+            <Label text="Customer:" />
+            <TextField fx:id="customerName" />
+            <Label fx:id="date" />
+        </HBox>
+        <TableView fx:id="productsTable" maxHeight="150" maxWidth="380" />
+        <Label fx:id="totalPrice" text="Total: 0" />
+        <SplitPane />
+        <HBox alignment="CENTER" spacing="10">
+            <TextField fx:id="productName" promptText="Product name" prefWidth="200"/>
+            <Button fx:id="searchProduct" text="Search" />
+        </HBox>
+        <TextArea fx:id="productInfo" maxHeight="130" maxWidth="380" promptText="The product information will appear here" />
+        <HBox alignment="CENTER" spacing="10">
+            <Spinner fx:id="amountProduct" maxWidth="70" editable="true" />
+            <Button fx:id="addAmount" text="Add" />
+        </HBox>
+        <Button fx:id="createOrder" text="Create order" />
+    </VBox>
+</AnchorPane>
