@@ -1,9 +1,20 @@
 package com.mercadolibre.integradora2.model;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.NoSuchElementException;
+import java.util.stream.Stream;
 
 public class Searcher<T extends Comparable<T>, E> {
+    //Maybe not adding this feature
+    private E[] searchControl(ArrayList<E> arr, Class<E> clazz,T lower, T upper, Comparator<E> comparator, Stream<T> stream) {
+        arr.sort(comparator);
+        T[] elements = (T[]) Array.newInstance(clazz, arr.size());
+        stream.toArray(size -> elements);
+        return searchByRange(arr, elements, lower, upper).toArray((E[]) Array.newInstance(clazz, 0));
+    }
+
     /**
      * This method searches by range using the binary search method.
      * An array of an object that extends comparable must be given.
@@ -62,7 +73,6 @@ public class Searcher<T extends Comparable<T>, E> {
 
         return result;
     }
-
 
     /**
      * This method performs the binary search as a generic type, an array

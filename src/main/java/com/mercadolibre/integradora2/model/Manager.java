@@ -4,11 +4,11 @@ import com.google.gson.Gson;
 import com.mercadolibre.integradora2.exception.DuplicatedElementException;
 
 import java.io.*;
+import java.lang.reflect.Array;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.NoSuchElementException;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.IntStream;
 
 public class Manager {
     private ArrayList<Product> products;
@@ -29,11 +29,11 @@ public class Manager {
         Gson gson = new Gson();
 
         File projectDir = new File(System.getProperty("user.dir"));
-        File dataDirectory = new File(projectDir+"/data");
-        File products = new File(projectDir+"/data/products.json");
-        File orders = new File(projectDir+"/data/orders.json");
+        File dataDirectory = new File(projectDir + "/data");
+        File products = new File(projectDir + "/data/products.json");
+        File orders = new File(projectDir + "/data/orders.json");
 
-        if(!dataDirectory.exists()){
+        if (!dataDirectory.exists()) {
             dataDirectory.mkdirs();
         }
 
@@ -57,7 +57,7 @@ public class Manager {
             this.orders.addAll(Arrays.asList(jsonOrders));
         } catch (FileNotFoundException e) {
             msj = "Data not found. System will save changes from this session.";
-        } catch (IOException e){
+        } catch (IOException e) {
             //e.printStackTrace();
         }
         return msj;
@@ -69,8 +69,8 @@ public class Manager {
      */
     public void writeData() {
         File projectDir = new File(System.getProperty("user.dir"));
-        File products = new File(projectDir+"/data/products.json");
-        File orders = new File(projectDir+"/data/orders.json");
+        File products = new File(projectDir + "/data/products.json");
+        File orders = new File(projectDir + "/data/orders.json");
 
         Gson gson = new Gson();
         String jsonProducts = gson.toJson(this.products);
@@ -82,7 +82,7 @@ public class Manager {
             fosOrders.write(jsonOrders.getBytes(StandardCharsets.UTF_8));
             fosProducts.close();
             fosOrders.close();
-        } catch (IOException e){
+        } catch (IOException e) {
             //e.printStackTrace();
         }
     }
@@ -127,10 +127,87 @@ public class Manager {
      * @return A list with the products that matches those elements.
      */
     public Product[] searchProductByAmount(int lower, int upper) throws NoSuchElementException {
+        return integerSearchControl(
+                lower,
+                upper,
+                Comparator.comparingInt(Product::getAmount),
+                products.stream().mapToInt(Product::getAmount)
+        );
+    }
+
+    /**
+     * This method manages the behavior of the searcher when a search of type integer
+     * is performed
+     *
+     * @param lower The lower limit of the search
+     * @param upper The upper limit of the search
+     * @param productComparator A Comparator in which is going to be performed the search
+     * @param intStream An array stream containing the elements to search on.
+     * @return A list of type Product
+     */
+    private Product[] integerSearchControl(int lower, int upper, Comparator<Product> productComparator, IntStream intStream) {
         Searcher<Integer, Product> bs = new Searcher<>();
-        products.sort(Comparator.comparingInt(Product::getAmount));
-        Integer[] amounts = products.stream().mapToInt(Product::getAmount).boxed().toArray(Integer[]::new);
-        return bs.searchByRange(products, amounts, lower, upper).toArray(Product[]::new);
+        products.sort(productComparator);
+        Integer[] elements = intStream.boxed().toArray(Integer[]::new);
+        return bs.searchByRange(products, elements, lower, upper).toArray(Product[]::new);
+    }
+
+
+    /**
+     * @param elements
+     * @param lower
+     * @param upper
+     * @param suffix
+     * @param keyExtractor
+     * @param <T>
+     * @param <E>
+     * @return
+     * @throws NoSuchElementException
+     */
+    public <T extends Comparable<T>, E> E[] searchElementsByStrings(List<E> elements, String lower, String upper, boolean suffix, Function<E, String> keyExtractor) throws NoSuchElementException {
+        //Creates a new searcher that searches by strings on elements of type E
+        Searcher<String, E> searcher = new Searcher<>();
+        //The keys that are going to be subtracted from the original array
+        String[] stringKeys;
+
+        //Setting both limits to the same length
+        String[] limits = setStringLengths(lower, upper);
+        lower = limits[0];
+        upper = limits[1];
+
+        //Checking if the search is by prefix or suffix
+        if (suffix) {
+            //Reversing the order because the elements will be ordered in reverse by suffix
+            lower = new StringBuilder(lower).reverse().toString();
+            upper = new StringBuilder(upper).reverse().toString();
+            //Sorting the elements by comparing the key
+            //KeyExtractor is part of the functional programming implemented in java
+            //Function is a functional interface that accepts a value and returns an object
+            //Apply, as its name indicates, applies the given function to the keyExtractor
+            elements.sort(Comparator.comparing(
+                    (E e) -> new StringBuilder(keyExtractor.apply(e)).reverse().toString())
+            );
+            //Takes the keys from the method given by the keyExtractor and reverse them
+            //before adding them to a new array of String
+            stringKeys = elements.stream()
+                    .map(keyExtractor)
+                    .map(str -> new StringBuilder(str).reverse().toString())
+                    .toArray(String[]::new);
+        } else {
+            //Does the same logic as with suffix, but this one extracts
+            //the key directly to the stringKeys array
+            elements.sort(Comparator.comparing(keyExtractor));
+            stringKeys = elements.stream()
+                    .map(keyExtractor)
+                    .toArray(String[]::new);
+        }
+
+        //Performs the search
+        //(E[]) Array.newInstance(elements.get(0).getClass(), 0) is the creating of a new
+        //array based on the type E, as the program does not kno    w which will be the length of
+        //the final array, it initially establishes it as a length 0, then increase its length as
+        //the elements start coming
+        return searcher.searchByRange((ArrayList<E>) elements, stringKeys, lower, upper).toArray((E[]) Array.newInstance(elements.get(0).getClass(), 0));
     }
 
     /**
@@ -162,10 +239,14 @@ public class Manager {
      * @throws NoSuchElementException When a category is not registered in any product.
      */
     public Product[] searchProductsByCategory(ProductCategory productCategory1, ProductCategory productCategory2) throws NoSuchElementException {
-        Searcher<Integer, Product> bs = new Searcher<>();
-        products.sort(Comparator.comparing(Product::getCategory));
-        Integer[] categories = products.stream().map(Product::getCategory).map(ProductCategory::ordinal).toArray(Integer[]::new);
-        return bs.searchByRange(products, categories, productCategory1.ordinal(), productCategory2.ordinal()).toArray(Product[]::new);
+        return integerSearchControl(
+                productCategory1.ordinal(),
+                productCategory2.ordinal(),
+                Comparator.comparing(Product::getCategory),
+                products.stream()
+                        .map(Product::getCategory)
+                        .mapToInt(ProductCategory::ordinal)
+        );
     }
 
     /**
@@ -180,10 +261,13 @@ public class Manager {
      *                                or when the upper limit is smaller than the smaller times bought in products.
      */
     public Product[] searchProductsByTimesBought(int lower, int upper) throws NoSuchElementException {
-        Searcher<Integer, Product> bs = new Searcher<>();
-        products.sort(Comparator.comparingInt(Product::getTimesBought));
-        Integer[] times = products.stream().mapToInt(Product::getTimesBought).boxed().toArray(Integer[]::new);
-        return bs.searchByRange(products, times, lower, upper).toArray(Product[]::new);
+        return integerSearchControl(
+                lower,
+                upper,
+                Comparator.comparingInt(Product::getTimesBought),
+                products.stream()
+                        .mapToInt(Product::getTimesBought)
+        );
     }
 
     /**
@@ -202,32 +286,46 @@ public class Manager {
      * @return An array with the products between that range
      */
     public Product[] searchProductsByStrings(String lower, String upper, boolean suffix) throws NoSuchElementException {
-        Searcher<String, Product> bs = new Searcher<>();
-        String[] names;
+        return searchElementsByStrings(products, lower, upper, suffix, Product::getName);
+    }
+
+    /**
+     *
+     *
+     * @param lower
+     * @param upper
+     * @param suffix
+     * @return
+     * @throws NoSuchElementException
+     */
+    public Order[] searchOrdersByStrings(String lower, String upper, boolean suffix) throws NoSuchElementException {
+        return searchElementsByStrings(orders, lower, upper, suffix, Order::getCustomerName);
+    }
+
+    /**
+     * This function selects the bigger string length and set it to the
+     * other string, this function does not add any character, it works with the
+     * StringBuilder java class and only adds null sections equals to \u0000
+     * till both lengths are equals.
+     *
+     * @param string1 First string
+     * @param string2 Second string
+     * @return An array of strings with the two strings given with the same length
+     */
+    private String[] setStringLengths(String string1, String string2) {
         StringBuilder temp;
 
-        //Making sure that both limits have the same length
-        if (lower.length() > upper.length()) {
-            temp = new StringBuilder(upper);
-            temp.setLength(lower.length());
-            upper = temp.toString();
+        if (string1.length() > string2.length()) {
+            temp = new StringBuilder(string2);
+            temp.setLength(string1.length());
+            string2 = temp.toString();
         } else {
-            temp = new StringBuilder(lower);
-            temp.setLength(upper.length());
-            lower = temp.toString();
+            temp = new StringBuilder(string1);
+            temp.setLength(string2.length());
+            string1 = temp.toString();
         }
 
-        if (suffix) {
-            lower = new StringBuilder(lower).reverse().toString();
-            upper = new StringBuilder(upper).reverse().toString();
-            products.sort(Comparator.comparing((Product p) -> new StringBuilder(p.getName()).reverse().toString()));
-            names = products.stream().map(Product::getName).map(str -> new StringBuilder(str).reverse().toString()).toArray(String[]::new);
-        } else {
-            products.sort(Comparator.comparing(Product::getName));
-            names = products.stream().map(Product::getName).toArray(String[]::new);
-        }
-
-        return bs.searchByRange(products, names, lower, upper).toArray(Product[]::new);
+        return new String[]{string1, string2};
     }
 
     public ArrayList<Product> getProducts() {

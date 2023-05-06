@@ -5,7 +5,6 @@ import com.mercadolibre.integradora2.model.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
 import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -119,11 +118,19 @@ public class ManagerTest {
 
         Product[] result = manager.searchProductsByStrings("Co", "Po", false);
 
-        for (Product mx : result) {
-            System.out.println(mx.getName());
-        }
-
         for (int i = 0; i < 4; i++) {
+            assertEquals(manager.getProducts().get(i), result[i]);
+        }
+    }
+
+    @Test
+    void searchProductsByCategory() {
+        setUpScenario2();
+        setUpScenario4();
+
+        Product[] result = manager.searchProductsByCategory(ProductCategory.FOOD_AND_DRINKS, ProductCategory.STATIONERY);
+
+        for (int i = 0; i < 3; i++) {
             assertEquals(manager.getProducts().get(i), result[i]);
         }
     }
