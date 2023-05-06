@@ -11,7 +11,7 @@ public class MainController {
     private Button startSystemBtn;
 
     @FXML
-    protected void onStartBtn() {
+    public void onStartBtn() {
         Stage stage = (Stage) startSystemBtn.getScene().getWindow();
         stage.close();
         String msj = MainApplication.getManager().readData();

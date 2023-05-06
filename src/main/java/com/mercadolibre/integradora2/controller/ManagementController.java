@@ -1,55 +1,39 @@
 package com.mercadolibre.integradora2.controller;
 
 import com.mercadolibre.integradora2.MainApplication;
-import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 
-import java.net.URL;
-import java.util.ResourceBundle;
-
-public class ManagementController implements Initializable {
+public class ManagementController {
     @FXML
-    public TableColumn nameColumn;
+    private TableColumn nameColumn;
     @FXML
-    public TableColumn descriptionColumn;
+    private TableColumn descriptionColumn;
+    @FXML
+    private Button addStockBtn;
     @FXML
     private Button addProductBtn;
-
     @FXML
     private Button addOrderBtn;
-
     @FXML
     private Button searchBtn;
-
     @FXML
     private Button saveBtn;
-
     @FXML
     private TableView<String> productsTable;
-
     @FXML
     private TableView<String> ordersTable;
 
-
-
     @FXML
-    protected void onSaveBtn() {
+    public void onSaveBtn() {
         MainApplication.getManager().writeData();
         MainApplication.showAlert("Log info", "Data saved correctly.", Alert.AlertType.INFORMATION);
     }
-
+    @FXML
     public void onAddProductBtn() {
         MainApplication.renderView("addProduct-view.fxml", "Add product", 520, 360);
-    }
-
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-
     }
 }

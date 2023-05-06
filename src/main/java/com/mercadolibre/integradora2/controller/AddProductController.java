@@ -8,15 +8,15 @@ import javafx.stage.Stage;
 
 public class AddProductController {
     @FXML
-    public TextField nameField, priceField, amountField;
+    private TextField nameField, priceField, amountField;
     @FXML
-    public TextArea descriptionArea;
+    private TextArea descriptionArea;
     @FXML
-    public ToggleGroup categoryGroup;
+    private ToggleGroup categoryGroup;
     @FXML
-    public RadioButton books, food, care, electronics, stationery, games, clothes, sports;
+    private RadioButton books, food, care, electronics, stationery, games, clothes, sports;
     @FXML
-    public Button addProductBtn;
+    private Button addProductBtn;
 
     private int category = -1;
 
