@@ -1,6 +1,7 @@
 package com.mercadolibre.integradora2.controller;
 
 import com.mercadolibre.integradora2.MainApplication;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
