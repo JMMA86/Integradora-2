@@ -6,13 +6,13 @@ import java.util.ArrayList;
 public class Order {
     private String customerName;
     private final ArrayList<Product> products;
-    private final LocalDate DATE;
+    private final String DATE;
     private double totalPrice = 0;
 
     public Order(String customerName, ArrayList<Product> products) {
         this.customerName = customerName;
         this.products = products;
-        this.DATE = LocalDate.now();
+        this.DATE = LocalDate.now().toString();
         for(Product p : products) {
             totalPrice += p.getPrice();
         }
@@ -30,7 +30,7 @@ public class Order {
         return products;
     }
 
-    public LocalDate getDATE() {
+    public String getDATE() {
         return DATE;
     }
 
