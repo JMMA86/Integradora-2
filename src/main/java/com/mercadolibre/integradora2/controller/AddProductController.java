@@ -19,7 +19,7 @@ public class AddProductController {
     private Button addProductBtn;
 
     private int category = -1;
-
+    @FXML
     public void setCategory(ActionEvent actionEvent) {
         if (books.isSelected()) {
             category = 1;
@@ -41,6 +41,7 @@ public class AddProductController {
         updateAddBtn();
     }
 
+    @FXML
     public void AddProduct() {
         try {
             String name = nameField.getText();
@@ -57,6 +58,7 @@ public class AddProductController {
         }
     }
 
+    @FXML
     public void updateAddBtn() {
         addProductBtn.setDisable(nameField.getText().isEmpty() || priceField.getText().isEmpty() || amountField.getText().isEmpty() || descriptionArea.getText().isEmpty() || category == -1);
     }
