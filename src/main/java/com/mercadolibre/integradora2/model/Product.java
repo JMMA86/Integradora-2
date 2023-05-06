@@ -68,4 +68,13 @@ public class Product {
     public void setTimesBought(int timesBought) {
         this.timesBought = timesBought;
     }
+
+    public String toString() {
+        StringBuilder category = new StringBuilder();
+        String[] words = this.category.name().toLowerCase().split("_");
+        for (String word : words) {
+            category.append(word.substring(0, 1).toUpperCase() + word.substring(1) + " ");
+        }
+        return name + "\n- Price: " + price + "\n- Amount: " + amount + "\n- Category: " + category;
+    }
 }
