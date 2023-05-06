@@ -7,7 +7,7 @@ module com.mercadolibre.integradora2 {
     opens com.mercadolibre.integradora2 to javafx.fxml;
     exports com.mercadolibre.integradora2;
     exports com.mercadolibre.integradora2.controller;
-    opens com.mercadolibre.integradora2.controller to javafx.fxml;
     exports com.mercadolibre.integradora2.model;
     opens com.mercadolibre.integradora2.model to com.google.gson, javafx.fxml;
+    opens com.mercadolibre.integradora2.controller to com.google.gson, javafx.fxml;
 }

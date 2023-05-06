@@ -45,7 +45,7 @@ public class ManagementController implements Initializable {
     }
 
     public void onAddProductBtn() {
-        MainApplication.renderView("addProduct-view.fxml", "Add product", 640, 360);
+        MainApplication.renderView("addProduct-view.fxml", "Add product", 520, 360);
     }
 
     @Override

@@ -4,26 +4,51 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="640.0" prefWidth="360.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mercadolibre.integradora2.model.AddProductController">
-<VBox spacing="10">
-    <HBox alignment="CENTER" spacing="10">
-        <VBox>
-            <Label text="Name:" />
-            <TextField fx:id="nameField" />
+<AnchorPane prefHeight="360.0" prefWidth="520.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mercadolibre.integradora2.controller.AddProductController">
+    <VBox spacing="15">
+        <HBox alignment="CENTER" spacing="10">
+            <VBox>
+                <Label text="Name:" />
+                <TextField fx:id="nameField" maxWidth="240" prefWidth="240" />
+            </VBox>
+            <VBox>
+                <Label text="Price:" />
+                <TextField fx:id="priceField" maxWidth="120" prefWidth="120" />
+            </VBox>
+            <VBox>
+                <Label text="Amount:" />
+                <TextField fx:id="amountField" maxWidth="120" prefWidth="120" />
+            </VBox>
+        </HBox>
+        <VBox spacing="10">
+            <Label text="Description:" />
+            <TextArea fx:id="descriptionArea" maxWidth="500" prefHeight="100" prefWidth="500" />
+            <Label text="Category" />
+            <HBox alignment="CENTER" spacing="30">
+                <VBox spacing="10">
+                    <RadioButton fx:id="books" mnemonicParsing="false" text="Books" onAction="#getCategory" >
+                  <toggleGroup>
+                     <ToggleGroup fx:id="categoryGroup" />
+                  </toggleGroup></RadioButton>
+                    <RadioButton fx:id="food" mnemonicParsing="false" text="Food and Drinks" toggleGroup="$categoryGroup" onAction="#getCategory" />
+                    <RadioButton fx:id="care" mnemonicParsing="false" text="Personal Care" toggleGroup="$categoryGroup" onAction="#getCategory" />
+                </VBox>
+                <VBox spacing="10">
+                    <RadioButton fx:id="electronics" mnemonicParsing="false" text="Electronics" toggleGroup="$categoryGroup" onAction="#getCategory" />
+                    <RadioButton fx:id="stationery" mnemonicParsing="false" text="Stationery" toggleGroup="$categoryGroup" onAction="#getCategory" />
+                    <RadioButton fx:id="games" mnemonicParsing="false" text="Toys/games" toggleGroup="$categoryGroup" onAction="#getCategory" />
+                </VBox>
+                <VBox spacing="10">
+                    <RadioButton fx:id="clothes" mnemonicParsing="false" text="Clothes/Accessories" toggleGroup="$categoryGroup" onAction="#getCategory" />
+                    <RadioButton fx:id="sports" mnemonicParsing="false" text="Sports" toggleGroup="$categoryGroup" onAction="#getCategory" />
+                </VBox>
+            </HBox>
         </VBox>
-        <VBox>
-            <Label text="Price:" />
-            <TextField fx:id="priceField" />
+        <VBox alignment="CENTER">
+            <Button fx:id="addProductBtn" text="Add Product" disable="true" onAction="#AddProduct"/>
         </VBox>
-        <VBox>
-            <Label text="Amount:" />
-            <TextField fx:id="amountField" />
-        </VBox>
-    </HBox>
-    <VBox spacing="10">
-        <Label text="Description:"/>
-        <TextArea fx:id="descriptionArea" maxWidth="500"/>
+        <padding>
+           <Insets left="10.0" />
+        </padding>
     </VBox>
-
-</VBox>
 </AnchorPane>
