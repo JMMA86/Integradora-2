@@ -1,6 +1,7 @@
 package com.mercadolibre.integradora2.controller;
 
 import com.mercadolibre.integradora2.MainApplication;
+import com.mercadolibre.integradora2.model.Order;
 import com.mercadolibre.integradora2.model.Product;
 import com.mercadolibre.integradora2.model.ProductCategory;
 import javafx.collections.FXCollections;
@@ -9,10 +10,11 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 import java.net.URL;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class SearchController implements Initializable {
     //Selectors
@@ -30,6 +32,8 @@ public class SearchController implements Initializable {
     private Button searchBtn;
     //RadioButtons for productSearch
     @FXML
+    private HBox orderRadioButtons;
+    @FXML
     private RadioButton priceRB;
     @FXML
     private ToggleGroup searcherToggle;
@@ -38,17 +42,30 @@ public class SearchController implements Initializable {
     @FXML
     private RadioButton stockRB;
     @FXML
-    private RadioButton prefixRB;
+    private RadioButton namePrefixRB;
     @FXML
     private RadioButton timesRB;
     @FXML
-    private RadioButton suffixRB;
+    private RadioButton nameSuffixRB;
+    //RadioButtons for orderSearch
+    @FXML
+    private ToggleGroup orderToggle;
+    @FXML
+    private HBox productRadioButtons;
+    @FXML
+    private RadioButton nameOrderPrefixRB;
+    @FXML
+    private RadioButton nameOrderSuffixRB;
+    @FXML
+    private RadioButton priceOrderRB;
+    @FXML
+    private RadioButton dateRB;
     //Category selector
     @FXML
     private ComboBox<ProductCategory> categorySelector;
     //TableView for Products
     @FXML
-    private TableView<Product> resultTable;
+    private TableView<Product> productTable;
     @FXML
     private TableColumn<Product, String> nameProduct;
     @FXML
@@ -57,20 +74,83 @@ public class SearchController implements Initializable {
     private TableColumn<Product, ProductCategory> categoryProduct;
     @FXML
     private TableColumn<Product, Double> priceProduct;
+    @FXML
+    private TableColumn<Product, Integer> boughtProduct;
+    //TableView for Orders
+    @FXML
+    private TableView<Order> orderTable;
+    @FXML
+    private TableColumn<Order, String> costumerOrder;
+    @FXML
+    private TableColumn<Order, Double> priceOrder;
+    @FXML
+    private TableColumn<Order, String> dateOrder;
     //Return Button
     @FXML
     private Button returnBtn;
     @FXML
     public void selectSearcher() {
-    }
-    @FXML
-    public void selectOrder() {
+        //Managed = occupy space
+        if (searcherSelector.getValue().equals("Product Searcher")) {
+            categorySelector.setManaged(true);
+            productRadioButtons.setVisible(true);
+            productRadioButtons.setManaged(true);
+            orderRadioButtons.setVisible(false);
+            orderRadioButtons.setManaged(false);
+            productTable.setVisible(true);
+            productTable.setManaged(true);
+            orderTable.setVisible(false);
+            orderTable.setManaged(false);
+        } else {
+            categorySelector.setManaged(false);
+            productRadioButtons.setVisible(false);
+            productRadioButtons.setManaged(false);
+            orderRadioButtons.setVisible(true);
+            orderRadioButtons.setManaged(true);
+            productTable.setVisible(false);
+            productTable.setManaged(false);
+            orderTable.setVisible(true);
+            orderTable.setManaged(true);
+        }
     }
     @FXML
     public void updateSearchBtn() {
+        searchBtn.setDisable(lowerValueField.getText().isEmpty() || higherValueField.getText().isEmpty());
+        if (categoryRB.isSelected()) {
+            searchBtn.setDisable(false);
+            lowerValueField.setVisible(false);
+            higherValueField.setVisible(false);
+            lowerValueField.setManaged(false);
+            higherValueField.setManaged(false);
+        } else {
+            lowerValueField.setVisible(true);
+            higherValueField.setVisible(true);
+            lowerValueField.setManaged(true);
+            higherValueField.setManaged(true);
+        }
     }
     @FXML
     public void searchProduct() {
+        if (higherValueField.getText().compareTo(lowerValueField.getText()) < 0) {
+            MainApplication.showAlert("Error", "Invalid intervals.", Alert.AlertType.ERROR);
+            return;
+        }
+        if (searcherSelector.getValue().equals("Product Searcher")) {
+            ObservableList<Product> result;
+            if (priceRB.isSelected()) {
+                try {
+                    result = FXCollections.observableArrayList(new ArrayList<>(Arrays.asList(MainApplication.getManager().searchProductByPrice(Double.parseDouble(lowerValueField.getText()), Double.parseDouble(higherValueField.getText())))));
+                    productTable.setItems(result);
+                } catch (NumberFormatException e) {
+                    MainApplication.showAlert("Error", "Invalid intervals.", Alert.AlertType.ERROR);
+                } catch (NoSuchElementException e) {
+                    MainApplication.showAlert("Error", "No products found.", Alert.AlertType.ERROR);
+                }
+                return;
+            }
+        } else {
+
+        }
     }
     @FXML
     public void close() {
@@ -95,5 +175,7 @@ public class SearchController implements Initializable {
         categorySelector.setValue(listCategorySelector.get(0));
         //Initialize price selector (RadioButton)
         priceRB.setSelected(true);
+        //Initialize name selector (RadioButton for orderSearcher selection)
+        nameOrderPrefixRB.setSelected(true);
     }
 }
