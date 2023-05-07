@@ -57,8 +57,19 @@ __Completeness:__ 7/7 = 1.0
 
 __Commit:__ dce01f6
 
-__Failure density:__ 0/7 = 0.0
+__Failure density:__ 0/11 = 0.0
 
 __Reliability:__ 1 - 0.0 = 1.0
 
 __Completeness:__ 11/7 = 1.57
+
+
+### __Iteration 5__
+
+__Commit:__ 30cdf82
+
+__Failure density:__ 2/8 = 0.25
+
+__Reliability:__ 1 - 0.25 = 0.75
+
+__Completeness:__ 8/7 = 1.14
