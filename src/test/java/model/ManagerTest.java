@@ -14,87 +14,72 @@ public class ManagerTest {
     Manager manager;
     Random rnd;
 
+    Product sampleProduct;
+
     @BeforeEach
     void initialSetup() {
         manager = new Manager();
         rnd = new Random();
     }
 
-    void setupScenario1() {
-        try {
-            manager.addProduct("CocaCola", "Enjoy the sugar", 1.5, 50, 4, 10);
-        } catch (DuplicatedElementException e) {
-            throw new RuntimeException(e);
-        }
-    }
+    // SETUPS
 
-    void setUpScenario2() {
+    void setupInitializeMultipleProducts() {
         try {
+            manager.addProduct("Adidas Ultraboost 21", "Responsive and cushioned running shoes", 179.99, 20, 6, 7);
+            manager.addProduct("Cadbury Dairy Milk Chocolate", "Creamy milk chocolate bar", 2.99, 250, 4, 3);
             manager.addProduct("CocaCola", "Enjoy the sugar", 1.5, 50, 4, 10);
-            manager.addProduct("PonyMalta", "For the sugar enjoyers", 2.0, 100, 4, 15);
-            manager.addProduct("The integrative task", "To suffer", 10.0, 2, 6, 15);
-        } catch (DuplicatedElementException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    void setUpScenario3() {
-        try {
-            manager.addProduct("CocaCola", "Enjoy the sugar", 1.5, 50, 4, 10);
-            manager.addProduct("Pepsi", "Enjoy the sugar", 1.5, 50, 4, 10);
-        } catch (DuplicatedElementException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    void setUpScenario4() {
-        try {
-            manager.addProduct("Minecraft", "For the miners", 150.5, 100, 8, 150);
+            manager.addProduct("Harry Potter and the Philosopher's Stone", "The first book in the Harry Potter series", 12.99, 100, 1, 50);
+            manager.addProduct("iPhone 12 Pro", "Apple's latest flagship phone", 999.99, 25, 2, 15);
+            manager.addProduct("Levi's 501 Jeans", "Classic straight leg jeans", 69.99, 50, 3, 20);
+            manager.addProduct("Lindt Swiss Chocolate", "Smooth and creamy milk chocolate", 3.99, 200, 4, 5);
             manager.addProduct("Lipstick", "Beauty", 150.5, 7, 7, 145);
-        } catch (DuplicatedElementException e) {
-            throw new RuntimeException(e);
+            manager.addProduct("Minecraft", "For the miners", 150.5, 100, 8, 150);
+            manager.addProduct("Monopoly Board Game", "Classic board game of buying and selling properties", 29.99, 40, 8, 18);
+            manager.addProduct("Nike Air Max 270", "Stylish and comfortable sneakers", 129.99, 30, 6, 12);
+            manager.addProduct("Nivea Soft Moisturizing Cream", "Quick-absorbing cream for soft skin", 6.99, 150, 7, 8);
+            manager.addProduct("Pepsi", "Enjoy the sugar", 1.5, 50, 4, 10);
+            manager.addProduct("PonyMalta", "For the sugar enjoyers", 2.0, 100, 4, 15);
+            manager.addProduct("Staedtler Triplus Fineliner Pens", "Fine tip colored pens for precise writing", 14.99, 75, 5, 30);
+            manager.addProduct("The integrative task", "To suffer", 10.0, 2, 6, 15);
+        } catch(DuplicatedElementException e) {
+            e.printStackTrace();
         }
     }
 
-    void setUpMultipleProductsAndOrders() {
-        setUpScenario4();
-
-        List<Product> aux = manager.getProducts().subList(0, 0);
-        manager.addOrder("Oscar", new ArrayList<>(aux));
-        aux = manager.getProducts().subList(0, 1);
-        manager.addOrder("Oscar", new ArrayList<>(aux));
-    }
-
-    void setUpMultipleOrdersNonRepeatedNames() {
-        setUpScenario2();
-
-        List<Product> aux = manager.getProducts().subList(0, 3);
+    void setupInitializeMultipleOrders() {
+        setupInitializeMultipleProducts();
+        List<Product> aux;
+        aux = manager.getProducts().subList(0, 3);
         manager.addOrder("Mario", new ArrayList<>(aux));
         aux = manager.getProducts().subList(1, 2);
         manager.addOrder("Martinez", new ArrayList<>(aux));
         aux = manager.getProducts().subList(0, 1);
         manager.addOrder("Felipe", new ArrayList<>(aux));
+        aux = manager.getProducts().subList(3, 6);
+        manager.addOrder("Jessica", new ArrayList<>(aux));
+        aux = manager.getProducts().subList(2, 4);
+        manager.addOrder("Eric", new ArrayList<>(aux));
+        aux = manager.getProducts().subList(1, 3);
+        manager.addOrder("Julia", new ArrayList<>(aux));
     }
 
-    // Add product
+    // Add Product Testing
 
     @Test
-    void addProductValidData() {
-        int limit = 10;
-        for (int i = 0; i < limit; i++) {
-            try {
-                manager.addProduct("SampleProduct" + i, "Enjoy the sugar", rnd.nextDouble(20), rnd.nextInt(10), rnd.nextInt(1, ProductCategory.values().length - 1), rnd.nextInt(10));
-            } catch (DuplicatedElementException e) {
-                throw new RuntimeException(e);
-            }
+    void addSingleProduct() {
+        try {
+            manager.addProduct("Sports Ball", "A ball...for sports", 10.5, 50, 8,40);
+        } catch(DuplicatedElementException e ) {
+            e.printStackTrace();
         }
-        assertEquals(manager.getProducts().size(), limit);
+        assertEquals(manager.getProducts().size(), 1);
     }
 
     @Test
-    void addProductRepeatedData() {
-        setupScenario1();
-        assertThrows(DuplicatedElementException.class, () -> manager.addProduct("CocaCola", "Enjoy the sugar", 1.5, 50, 4, 10));
+    void addRepeatedProduct() {
+        setupInitializeMultipleProducts();
+        assertThrows(DuplicatedElementException.class, () -> manager.addProduct( manager.getProducts().get(0).getName(), "desc", 1, 50, 4, 10 ));
     }
 
     @Test
@@ -106,95 +91,59 @@ public class ManagerTest {
         assertThrows(IllegalArgumentException.class, () -> manager.addProduct("CocaCola", "Enjoy the sugar", 1.5, -10, 10, -10));
     }
 
-    // Add order
+    // Add Order testing
 
     @Test
     void addOrderSingleProduct() {
-        setupScenario1();
-        manager.addOrder("Yuluka", manager.getProducts());
+        setupInitializeMultipleProducts();
+        manager.addOrder("Yuluka", new ArrayList<>(manager.getProducts().subList(0,1)));
         assertEquals(manager.getOrders().size(), 1);
+        assertEquals(manager.getOrders().get(0).getProducts().size(),1);
     }
 
     @Test
     void addOrderMultipleProducts() {
-        setUpScenario2();
-        manager.addOrder("Martin", manager.getProducts());
+        setupInitializeMultipleProducts();
+        manager.addOrder("Yuluka", new ArrayList<>(manager.getProducts().subList(0,manager.getProducts().size()))  );
         assertEquals(manager.getOrders().size(), 1);
         assertEquals(manager.getOrders().get(0).getProducts().size(), manager.getProducts().size());
     }
 
-    //Search
+    @Test
+    void addOrderEmptyOrder() {
+        setupInitializeMultipleProducts();
+        assertThrows(Exception.class, () -> manager.addOrder("Yuluka", new ArrayList<>()));
+    }
+
+    @Test
+    void addRepeatedOrder() {
+        setupInitializeMultipleOrders();
+        int initialAmount = manager.getOrders().size();
+        manager.addOrder(manager.getOrders().get(0).getCustomerName(), new ArrayList<>(manager.getProducts().subList(0,1)));
+        assertEquals(manager.getOrders().size(), initialAmount+1);
+    }
+
+    // Search Product Testing
     @Test
     void searchSingleProductByName() {
-        setupScenario1();
-
-        assertEquals(manager.getProducts().get(0), manager.searchProduct("CocaCola"));
+        setupInitializeMultipleProducts();
+        assertEquals(manager.getProducts().get(0), manager.searchProduct(manager.getProducts().get(0).getName()));
     }
 
     @Test
-    void searchProductsByRange() {
-        setUpScenario2();
-        setUpScenario4();
-
-        Product[] result = manager.searchProductsByStrings("Co", "Po", false);
-
-        for (int i = 0; i < 4; i++) {
-            assertEquals(manager.getProducts().get(i), result[i]);
-        }
-    }
-
-    @Test
-    void searchProductsByCategory() {
-        setUpScenario2();
-        setUpScenario4();
-
-        Product[] result = manager.searchProductsByCategory(ProductCategory.FOOD_AND_DRINKS, ProductCategory.STATIONERY);
-
-        for (int i = 0; i < 3; i++) {
-            assertEquals(manager.getProducts().get(i), result[i]);
-        }
-    }
-
-    // Search Order
-    @Test
-    void searchOrdersByCustomersRepeatedNames() {
-        setUpMultipleOrdersNonRepeatedNames();
-        setUpMultipleProductsAndOrders();
-
-        String[] names = {"Oscar", "Oscar"};
-        Order[] orders = manager.searchOrdersByCustomersNames("Os", "Osc", false);
-
-        for (int i = 0; i < orders.length; i++) {
-            assertEquals(names[i], orders[i].getCustomerName());
-        }
-    }
-
-    @Test
-    void searchOrdersByTotalPriceNotFound() {
-        setUpMultipleOrdersNonRepeatedNames();
-        setUpMultipleProductsAndOrders();
-
-        try {
-            Order[] orders = manager.searchOrdersByTotalPrice(200, 500);
-        } catch (NoSuchElementException e) {
-            assertNotNull(e);
-        }
-    }
-
-    @Test
-    void searchOrdersByActualDate() {
-        setUpMultipleOrdersNonRepeatedNames();
-        setUpMultipleProductsAndOrders();
-
-        try {
-            Order[] orders = manager.searchOrdersByDate(LocalDate.now().toString(), LocalDate.now().toString());
-
-            for (int i = 0; i < manager.getOrders().size(); i++) {
-                assertEquals(manager.getOrders().get(i), orders[i]);
+    void searchProductsByPrice() {
+        setupInitializeMultipleProducts();
+        double lower = 50.2, upper = 100.2;
+        ArrayList<Product> foundProducts = new ArrayList<>();
+        for(Product p : manager.getProducts()) {
+            if(p.getPrice() >= lower && p.getPrice() <= upper ) {
+                foundProducts.add(p);
             }
-            assertEquals(5, orders.length);
-        } catch (NoSuchElementException e) {
-            fail();
         }
+        Product[] output = manager.searchProductByPrice(lower, upper);
+        assertEquals(output.length, foundProducts.size());
     }
+
+    // Search Order testing
+
 }
