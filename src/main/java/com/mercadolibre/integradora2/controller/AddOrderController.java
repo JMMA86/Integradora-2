@@ -4,14 +4,16 @@ import com.mercadolibre.integradora2.MainApplication;
 import com.mercadolibre.integradora2.model.Product;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
+
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Locale;
 import java.util.NoSuchElementException;
 import java.util.ResourceBundle;
@@ -43,7 +45,7 @@ public class AddOrderController implements Initializable {
     @FXML
     private Button addAmount;
     @FXML
-    private Button createOrder;
+    private Button createOrderBtn;
     @FXML
     private Label date;
     private Product product;
@@ -71,6 +73,7 @@ public class AddOrderController implements Initializable {
             MainApplication.showAlert("Error", "This product has no stock.", Alert.AlertType.ERROR);
         } else {
             MainApplication.showAlert("Log info", "Added correctly", Alert.AlertType.INFORMATION);
+            //Set new stock
             this.product.setAmount(this.product.getAmount() - amountProduct.getValue());
             products.add(new Product(this.product.getName(), this.product.getDescription(), this.product.getPrice(), amountProduct.getValue(), this.product.getCategory(), 0));
             productsTable.setItems(products);
@@ -91,18 +94,24 @@ public class AddOrderController implements Initializable {
             MainApplication.showAlert("Error", "Please, enter customer name.", Alert.AlertType.ERROR);
         } else {
             MainApplication.showAlert("Log info", "Order added correctly.", Alert.AlertType.INFORMATION);
+            MainApplication.getManager().addOrder(customerName.getText(), new ArrayList<>(products));
+            Stage stage = (Stage) createOrderBtn.getScene().getWindow();
+            stage.close();
         }
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        //Initialize columns
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         amountColumn.setCellValueFactory(new PropertyValueFactory<>("amount"));
         categoryColumn.setCellValueFactory(new PropertyValueFactory<>("category"));
         priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
+        //Initialize date
         LocalDate localDate = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         date.setText("Date: " + localDate.format(formatter));
+        //Initialize Spinner
         SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 100);
         valueFactory.setValue(1);
         amountProduct.setValueFactory(valueFactory);

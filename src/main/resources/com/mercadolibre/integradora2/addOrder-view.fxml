@@ -29,6 +29,6 @@
             <Spinner fx:id="amountProduct" maxWidth="70" editable="true" disable="true"/>
             <Button fx:id="addAmount" text="Add" disable="true" onAction="#addProduct"/>
         </HBox>
-        <Button fx:id="createOrder" text="Create order" onAction="#addOrder"/>
+        <Button fx:id="createOrderBtn" text="Create order" onAction="#addOrder"/>
     </VBox>
 </AnchorPane>
