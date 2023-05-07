@@ -183,7 +183,8 @@ public class Manager {
             upper = new StringBuilder(upper).reverse().toString();
             //Sorting the elements by comparing the key
             //KeyExtractor is part of the functional programming implemented in java
-            //Function is a functional interface that accepts a value and returns an object
+            //Function is a functional interface that accepts a value and returns an result
+            //KeyExtractor is the function where the program is going to take the keys
             //Apply, as its name indicates, applies the given function to the keyExtractor
             elements.sort(Comparator.comparing(
                     (E e) -> new StringBuilder(keyExtractor.apply(e)).reverse().toString())
@@ -220,9 +221,9 @@ public class Manager {
      * @param lower the lower bound
      * @param upper the upper bound
      * @param keyExtractor The function where the key is extracted
-     * @param <E>
-     * @return
-     * @throws NoSuchElementException
+     * @param <E> element type that compounds elements
+     * @return An array of E elements with all the occurrences found
+     * @throws NoSuchElementException When no element is found in elements array
      */
     public <E> E[] searchElementsByDoubles(List<E> elements, Double lower, Double upper, Function<E, Double> keyExtractor) throws NoSuchElementException {
         Searcher<Double, E> searcher = new Searcher<>();
@@ -343,8 +344,18 @@ public class Manager {
         return searchElementsByDoubles(orders, lower, upper, Order::getTotalPrice);
     }
 
-    public Order[] searchOrdersByDate() {
-        return null;
+    /**
+     * This method searches by the date, returns an array of Order objects
+     * with all the coincidences starting with the oldest date.
+     * <p>
+     * the lower date cannot be greater than upper date
+     *
+     * @param lower the lower bound
+     * @param upper the upper bound
+     * @return An array of Order objects
+     */
+    public Order[] searchOrdersByDate(String lower, String upper) {
+        return searchElementsByStrings(orders, lower, upper, false, Order::getDATE);
     }
 
     /**
