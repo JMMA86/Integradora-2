@@ -227,13 +227,13 @@ public class ManagerTest {
         Product[] output = manager.searchProductsByTimesBought(lower, upper);
 
         // print for debugging
-        System.out.println("expected");
-        for(Product p : foundProducts) System.out.println(p.getAmount());
+        System.out.println("expected:");
+        for(Product p : foundProducts) System.out.println(p.getName());
         System.out.println("output:");
-        for(Product p : output) System.out.println(p.getAmount());
+        for(Product p : output) System.out.println(p.getName());
 
         // assertion
-        assertEquals(output.length, foundProducts.size());
+        assertEquals(foundProducts.size(), output.length);
     }
 
     @Test
