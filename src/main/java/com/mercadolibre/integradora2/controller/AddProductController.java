@@ -1,6 +1,7 @@
 package com.mercadolibre.integradora2.controller;
 
 import com.mercadolibre.integradora2.MainApplication;
+import com.mercadolibre.integradora2.exception.DuplicatedElementException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -55,6 +56,8 @@ public class AddProductController {
             stage.close();
         } catch (IllegalArgumentException e) {
             MainApplication.showAlert("Error", "Please, make sure all inputs are correct.", Alert.AlertType.ERROR);
+        } catch (DuplicatedElementException e) {
+            MainApplication.showAlert("Error", "This product already exists.", Alert.AlertType.ERROR);
         }
     }
 
