@@ -17,7 +17,6 @@ _*Scenarios and Use Cases:*_ https://docs.google.com/document/d/1Rs_S2UvqD8iIWew
 
 ## Quality indicators
 
-
 ### Iteration 1
 
 __Commit:__ b385128
@@ -48,8 +47,18 @@ __Commit:__ a08b4c5
 
 __Failure density:__ 0/7 = 0.0
 
-__Reliability:__ 1 - 0.0 =  1.0
+__Reliability:__ 1 - 0.0 = 1.0
 
 __Completeness:__ 7/7 = 1.0
 
+---
 
+### __Iteration 4__
+
+__Commit:__ dce01f6
+
+__Failure density:__ 0/7 = 0.0
+
+__Reliability:__ 1 - 0.0 = 1.0
+
+__Completeness:__ 11/7 = 1.57
