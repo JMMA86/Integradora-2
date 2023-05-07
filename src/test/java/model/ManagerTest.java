@@ -133,6 +133,8 @@ public class ManagerTest {
     @Test
     void searchProductsByPrice() {
         setupInitializeMultipleProducts();
+
+        // linear verification
         double lower = 50.2, upper = 100.2;
         ArrayList<Product> foundProducts = new ArrayList<>();
         for(Product p : manager.getProducts()) {
@@ -140,10 +142,156 @@ public class ManagerTest {
                 foundProducts.add(p);
             }
         }
+
+        // binary search
         Product[] output = manager.searchProductByPrice(lower, upper);
+
+        // print for debugging
+        System.out.println("expected:");
+        for(Product p : foundProducts) System.out.println(p.getPrice());
+        System.out.println("output:");
+        for(Product p : output) System.out.println(p.getPrice());
+
+        // asssertion
+        assertEquals(output.length, foundProducts.size());
+    }
+
+    @Test
+    void searchProductByCategory() {
+        setupInitializeMultipleProducts();
+
+        // linear verification
+        int lower = 2, upper = 4;
+        ArrayList<Product> foundProducts = new ArrayList<>();
+        for(Product p : manager.getProducts()) {
+            if(p.getCategory().ordinal() >= lower-1 && p.getCategory().ordinal() <= upper-1 ) {
+                foundProducts.add(p);
+            }
+        }
+
+        // binary search
+        Product[] output = manager.searchProductsByCategory(ProductCategory.values()[lower-1], ProductCategory.values()[upper-1]);
+
+        // print for debugging
+        System.out.println("expected:");
+        for(Product p : foundProducts) System.out.println(p.getCategory().ordinal());
+        System.out.println("output:");
+        for(Product p : output) System.out.println(p.getCategory().ordinal());
+
+        // assertion
+        assertEquals(output.length, foundProducts.size());
+    }
+
+    @Test
+    void searchProductByStock() {
+        setupInitializeMultipleProducts();
+
+        // linear verification
+        int lower = 30, upper = 200;
+        ArrayList<Product> foundProducts = new ArrayList<>();
+        for(Product p : manager.getProducts()) {
+            if( p.getAmount() >= lower && p.getAmount() <= upper) {
+                foundProducts.add(p);
+            }
+        }
+        foundProducts.sort(Comparator.comparing(Product::getAmount));
+
+        // binary search
+        Product[] output = manager.searchProductByAmount(lower, upper);
+
+        // print for debugging
+        System.out.println("expected");
+        for(Product p : foundProducts) System.out.println(p.getAmount());
+        System.out.println("output:");
+        for(Product p : output) System.out.println(p.getAmount());
+
+        // assertion
+        assertEquals(output.length, foundProducts.size());
+    }
+
+    @Test
+    void searchProductsByTimesBought() {
+        setupInitializeMultipleProducts();
+
+        // linear verification
+        int lower = 12, upper = 40;
+        ArrayList<Product> foundProducts = new ArrayList<>();
+        for(Product p : manager.getProducts()) {
+            if( p.getTimesBought() >= lower && p.getTimesBought() <= upper) {
+                foundProducts.add(p);
+            }
+        }
+        foundProducts.sort(Comparator.comparing(Product::getTimesBought));
+
+        // binary search
+        Product[] output = manager.searchProductsByTimesBought(lower, upper);
+
+        // print for debugging
+        System.out.println("expected");
+        for(Product p : foundProducts) System.out.println(p.getAmount());
+        System.out.println("output:");
+        for(Product p : output) System.out.println(p.getAmount());
+
+        // assertion
+        assertEquals(output.length, foundProducts.size());
+    }
+
+    @Test
+    void searchProductByPrefix() {
+        setupInitializeMultipleProducts();
+
+        // linear verification
+        String prefix = "Ni";
+        ArrayList<Product> foundProducts = new ArrayList<>();
+        for(Product p : manager.getProducts()) {
+            if( p.getName().startsWith(prefix) ) {
+                foundProducts.add(p);
+            }
+        }
+        foundProducts.sort(Comparator.comparing(Product::getName));
+
+        // binary search
+        Product[] output = manager.searchProductsByStrings(prefix, prefix, false);
+
+        // print for debugging
+        System.out.println("expected");
+        for(Product p : foundProducts) System.out.println(p.getName());
+        System.out.println("output:");
+        for(Product p : output) System.out.println(p.getName());
+
+        // assertion
+        assertEquals(output.length, foundProducts.size());
+    }
+
+    @Test
+    void searchProductBySuffix() {
+        setupInitializeMultipleProducts();
+
+        // linear verification
+        String suffix = "one";
+        ArrayList<Product> foundProducts = new ArrayList<>();
+        for(Product p : manager.getProducts()) {
+            if( p.getName().endsWith(suffix) ) {
+                foundProducts.add(p);
+            }
+        }
+        foundProducts.sort(Comparator.comparing(Product::getName));
+
+        // binary search
+        Product[] output = manager.searchProductsByStrings(suffix, suffix, true);
+
+        // print for debugging
+        System.out.println("expected");
+        for(Product p : foundProducts) System.out.println(p.getName());
+        System.out.println("output:");
+        for(Product p : output) System.out.println(p.getName());
+
+        // assertion
         assertEquals(output.length, foundProducts.size());
     }
 
     // Search Order testing
+
+
 
 }
