@@ -5,6 +5,7 @@ import com.mercadolibre.integradora2.model.Order;
 import com.mercadolibre.integradora2.model.Product;
 import com.mercadolibre.integradora2.model.ProductCategory;
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -70,6 +71,13 @@ public class ManagementController implements Initializable {
     @FXML
     public void onAddOrderBtn() {
         MainApplication.renderView("addOrder-view.fxml", "Add Order", 400, 500);
+        Stage stage = (Stage) addStockBtn.getScene().getWindow();
+        stage.close();
+    }
+
+    @FXML
+    public void onSearchBtn() {
+        MainApplication.renderView("search-view.fxml", "Add Order",400, 550);
         Stage stage = (Stage) addStockBtn.getScene().getWindow();
         stage.close();
     }

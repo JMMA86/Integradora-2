@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="550.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mercadolibre.integradora2.controller.SearchController">
+
+    <VBox alignment="CENTER" prefHeight="550.0" prefWidth="400.0" spacing="10">
+        <HBox alignment="CENTER" spacing="10">
+            <ComboBox fx:id="searcherSelector" promptText="Select searcher" onAction="#selectSearcher"/>
+            <ComboBox fx:id="orderSelector" promptText="Select order" onAction="#selectOrder"/>
+        </HBox>
+        <SplitPane/>
+        <HBox alignment="CENTER" spacing="10">
+            <TextField fx:id="lowerValueField" onKeyTyped="#updateSearchBtn" promptText="Lower Value" />
+            <TextField fx:id="higherValueField" onKeyTyped="#updateSearchBtn" promptText="Higher Value" />
+            <Button fx:id="searchBtn" disable="true" onAction="#searchProduct" text="Search" />
+        </HBox>
+        <HBox maxWidth="380">
+            <Label text="Search by:" />
+        </HBox>
+        <HBox alignment="CENTER" spacing="30">
+            <VBox spacing="10">
+                <RadioButton fx:id="priceRB" text="Price">
+               <toggleGroup>
+                  <ToggleGroup fx:id="searcherToggle" />
+               </toggleGroup></RadioButton>
+                <RadioButton fx:id="categoryRB" text="Category" toggleGroup="$searcherToggle"/>
+            </VBox>
+            <VBox spacing="10">
+                <RadioButton fx:id="stockRB" text="Stock" toggleGroup="$searcherToggle"/>
+                <RadioButton fx:id="prefixRB" text="Prefix" toggleGroup="$searcherToggle"/>
+            </VBox>
+            <VBox spacing="10">
+                <RadioButton fx:id="timesRB" text="Times bought" toggleGroup="$searcherToggle"/>
+                <RadioButton fx:id="suffixRB" text="Suffix" toggleGroup="$searcherToggle"/>
+            </VBox>
+        </HBox>
+        <ComboBox fx:id="categorySelector" promptText="Select category" disable="true"/>
+        <TableView fx:id="resultTable" maxHeight="300" maxWidth="380">
+            <columns>
+                <TableColumn fx:id="nameProduct" text="Name"/>
+                <TableColumn fx:id="stockProduct" text="Stock"/>
+                <TableColumn fx:id="categoryProduct" text="Category"/>
+                <TableColumn fx:id="priceProduct" text="Price"/>
+            </columns>
+        </TableView>
+        <Button fx:id="returnBtn" text="Close" onAction="#close"/>
+    </VBox>
+
+</AnchorPane>
