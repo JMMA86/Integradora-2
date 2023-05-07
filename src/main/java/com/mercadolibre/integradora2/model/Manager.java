@@ -139,10 +139,10 @@ public class Manager {
      * This method manages the behavior of the searcher when a search of type integer
      * is performed
      *
-     * @param lower The lower limit of the search
-     * @param upper The upper limit of the search
+     * @param lower             The lower limit of the search
+     * @param upper             The upper limit of the search
      * @param productComparator A Comparator in which is going to be performed the search
-     * @param intStream An array stream containing the elements to search on.
+     * @param intStream         An array stream containing the elements to search on.
      * @return A list of type Product
      */
     private Product[] integerSearchControl(int lower, int upper, Comparator<Product> productComparator, IntStream intStream) {
@@ -152,19 +152,20 @@ public class Manager {
         return bs.searchByRange(products, elements, lower, upper).toArray(Product[]::new);
     }
 
-
     /**
-     * @param elements
-     * @param lower
-     * @param upper
-     * @param suffix
-     * @param keyExtractor
-     * @param <T>
-     * @param <E>
-     * @return
-     * @throws NoSuchElementException
+     * Search elements by strings in a generic list. Will return all the coincidences
+     * that matches those elements by their prefixes or suffixes.
+     *
+     * @param <E>          the type of the element's array where the search will be performed.
+     * @param elements     the array with the element's to search
+     * @param lower        the lower limit
+     * @param upper        the upper limit
+     * @param suffix       the suffix if the search will be performed by prefixes or suffixes
+     * @param keyExtractor the function where the keys are going to be extracted
+     * @return An array with elements of type E
+     * @throws NoSuchElementException When theres no T that matches with the ranges provided.
      */
-    public <T extends Comparable<T>, E> E[] searchElementsByStrings(List<E> elements, String lower, String upper, boolean suffix, Function<E, String> keyExtractor) throws NoSuchElementException {
+    public <E> E[] searchElementsByStrings(List<E> elements, String lower, String upper, boolean suffix, Function<E, String> keyExtractor) throws NoSuchElementException {
         //Creates a new searcher that searches by strings on elements of type E
         Searcher<String, E> searcher = new Searcher<>();
         //The keys that are going to be subtracted from the original array
@@ -211,6 +212,31 @@ public class Manager {
     }
 
     /**
+     * This method search an element in a list of E elements. It works with
+     * doubles and returns a list of E elements that are equal to the range
+     * given by the upper and lower bounds.
+     *
+     * @param elements the list of E elements
+     * @param lower the lower bound
+     * @param upper the upper bound
+     * @param keyExtractor The function where the key is extracted
+     * @param <E>
+     * @return
+     * @throws NoSuchElementException
+     */
+    public <E> E[] searchElementsByDoubles(List<E> elements, Double lower, Double upper, Function<E, Double> keyExtractor) throws NoSuchElementException {
+        Searcher<Double, E> searcher = new Searcher<>();
+        Double[] doubleKeys;
+
+        elements.sort(Comparator.comparing(keyExtractor));
+        doubleKeys = elements.stream()
+                .map(keyExtractor)
+                .toArray(Double[]::new);
+
+        return searcher.searchByRange((ArrayList<E>) elements, doubleKeys, lower, upper).toArray((E[]) Array.newInstance(elements.get(0).getClass(), 0));
+    }
+
+    /**
      * This function search a product by its price in a range given
      * by the user.
      * <p>
@@ -221,10 +247,7 @@ public class Manager {
      * @return A list with the products between those ranges
      */
     public Product[] searchProductByPrice(double lower, double upper) throws NoSuchElementException {
-        Searcher<Double, Product> bs = new Searcher<>();
-        products.sort(Comparator.comparingDouble(Product::getPrice));
-        Double[] prices = products.stream().mapToDouble(Product::getPrice).boxed().toArray(Double[]::new);
-        return bs.searchByRange(products, prices, lower, upper).toArray(Product[]::new);
+        return searchElementsByDoubles(products, lower, upper, Product::getPrice);
     }
 
     /**
@@ -271,7 +294,7 @@ public class Manager {
     }
 
     /**
-     * This function search elements between a range given by Strings.
+     * This function search elements between a range given by strings.
      * It can search by prefixes or suffixes (Not both at the same time),
      * the more letters are given to the searcher, the most accurate will be output.
      * <p>
@@ -290,16 +313,38 @@ public class Manager {
     }
 
     /**
+     * This function search by a customer name, return all the order that matches those coincidences.
+     * If the suffix is true, it will return a list with the orders by suffix
+     * <p>
+     * The lower string must be alphabetically smaller than the upper string
      *
-     *
-     * @param lower
-     * @param upper
-     * @param suffix
-     * @return
-     * @throws NoSuchElementException
+     * @param lower  The lower string
+     * @param upper  The upper string
+     * @param suffix If the search is made by suffixes
+     * @return An array with the orders that matches those customers names
+     * @throws NoSuchElementException If theres no orders with those customers names.
      */
-    public Order[] searchOrdersByStrings(String lower, String upper, boolean suffix) throws NoSuchElementException {
+    public Order[] searchOrdersByCustomersNames(String lower, String upper, boolean suffix) throws NoSuchElementException {
         return searchElementsByStrings(orders, lower, upper, suffix, Order::getCustomerName);
+    }
+
+    /**
+     * Search by orders by their total price.
+     * <p>
+     * The lower limit must be smaller than the upper limit.
+     *
+     * @param lower the lower limit
+     * @param upper the upper limit
+     * @return An array with the orders that matches those prices.
+     * @throws NoSuchElementException When there is no elements that matches those
+     *                                characteristics
+     */
+    public Order[] searchOrdersByTotalPrice(double lower, double upper) throws NoSuchElementException {
+        return searchElementsByDoubles(orders, lower, upper, Order::getTotalPrice);
+    }
+
+    public Order[] searchOrdersByDate() {
+        return null;
     }
 
     /**
