@@ -1,5 +1,7 @@
 package com.mercadolibre.integradora2.model;
 
+import java.util.Locale;
+
 public class Product {
     private String name;
     private String description;
@@ -19,6 +21,15 @@ public class Product {
             this.amount = amount;
             this.category = ProductCategory.values()[category-1];
         }
+    }
+
+    public Product(String name, String description, double price, int amount, ProductCategory category, int timesBought) {
+        this.name = name;
+        this.description = description;
+        this.timesBought = timesBought;
+        this.price = price;
+        this.amount = amount;
+        this.category = category;
     }
 
     public String getName() {

@@ -1,23 +1,111 @@
 package com.mercadolibre.integradora2.controller;
 
+import com.mercadolibre.integradora2.MainApplication;
+import com.mercadolibre.integradora2.model.Product;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
+import java.util.NoSuchElementException;
 import java.util.ResourceBundle;
 
 public class AddOrderController implements Initializable {
 
     @FXML
+    private TextField customerName;
+    @FXML
+    private TableView<Product> productsTable;
+    @FXML
+    public TableColumn<Product, String> nameColumn;
+    @FXML
+    public TableColumn<Product, Integer> amountColumn;
+    @FXML
+    public TableColumn<Locale.Category, String> categoryColumn;
+    @FXML
+    public TableColumn<Product, Double> priceColumn;
+    @FXML
+    private Label totalPrice;
+    @FXML
+    private TextField productName;
+    @FXML
+    private Button searchProduct;
+    @FXML
+    private TextArea productInfo;
+    @FXML
+    private Spinner<Integer> amountProduct;
+    @FXML
+    private Button addAmount;
+    @FXML
+    private Button createOrder;
+    @FXML
     private Label date;
+    private Product product;
+    private final ObservableList<Product> products = FXCollections.observableArrayList();
+
+    @FXML
+    public void searchProduct() {
+        try {
+            Product product = MainApplication.getManager().searchProduct(productName.getText());
+            this.product = product;
+            productInfo.setText(product.toString());
+            amountProduct.setDisable(false);
+            addAmount.setDisable(false);
+        } catch (NoSuchElementException e) {
+            MainApplication.showAlert("Error", "Product not found.", Alert.AlertType.ERROR);
+        }
+    }
+    @FXML
+    public void addProduct() {
+        if (amountProduct.getValue() > this.product.getAmount()) {
+            MainApplication.showAlert("Error", "Amount limit exceeded.", Alert.AlertType.ERROR);
+        } else if (searchAddedProduct(this.product)) {
+            MainApplication.showAlert("Error", "Product already added.", Alert.AlertType.ERROR);
+        } else if (this.product.getAmount() == 0) {
+            MainApplication.showAlert("Error", "This product has no stock.", Alert.AlertType.ERROR);
+        } else {
+            MainApplication.showAlert("Log info", "Added correctly", Alert.AlertType.INFORMATION);
+            this.product.setAmount(this.product.getAmount() - amountProduct.getValue());
+            products.add(new Product(this.product.getName(), this.product.getDescription(), this.product.getPrice(), amountProduct.getValue(), this.product.getCategory(), 0));
+            productsTable.setItems(products);
+        }
+    }
+
+    public boolean searchAddedProduct(Product product) {
+        for (Product value : products) {
+            if (value == product) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void addOrder() {
+        if (customerName.getText().isEmpty()) {
+            MainApplication.showAlert("Error", "Please, enter customer name.", Alert.AlertType.ERROR);
+        } else {
+            MainApplication.showAlert("Log info", "Order added correctly.", Alert.AlertType.INFORMATION);
+        }
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        amountColumn.setCellValueFactory(new PropertyValueFactory<>("amount"));
+        categoryColumn.setCellValueFactory(new PropertyValueFactory<>("category"));
+        priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
         LocalDate localDate = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         date.setText("Date: " + localDate.format(formatter));
+        SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 100);
+        valueFactory.setValue(1);
+        amountProduct.setValueFactory(valueFactory);
+
     }
 }

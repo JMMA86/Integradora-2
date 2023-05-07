@@ -10,18 +10,25 @@
             <TextField fx:id="customerName" />
             <Label fx:id="date" />
         </HBox>
-        <TableView fx:id="productsTable" maxHeight="150" maxWidth="380" />
+        <TableView fx:id="productsTable" maxHeight="150" maxWidth="380">
+            <columns>
+                <TableColumn fx:id="nameColumn" text="Name"/>
+                <TableColumn fx:id="amountColumn" text="Amount"/>
+                <TableColumn fx:id="categoryColumn" text="Category"/>
+                <TableColumn fx:id="priceColumn" text="Price"/>
+            </columns>
+        </TableView>
         <Label fx:id="totalPrice" text="Total: 0" />
         <SplitPane />
         <HBox alignment="CENTER" spacing="10">
             <TextField fx:id="productName" promptText="Product name" prefWidth="200"/>
-            <Button fx:id="searchProduct" text="Search" />
+            <Button fx:id="searchProduct" text="Search" onAction="#searchProduct"/>
         </HBox>
         <TextArea fx:id="productInfo" maxHeight="130" maxWidth="380" promptText="The product information will appear here" />
         <HBox alignment="CENTER" spacing="10">
-            <Spinner fx:id="amountProduct" maxWidth="70" editable="true" />
-            <Button fx:id="addAmount" text="Add" />
+            <Spinner fx:id="amountProduct" maxWidth="70" editable="true" disable="true"/>
+            <Button fx:id="addAmount" text="Add" disable="true" onAction="#addProduct"/>
         </HBox>
-        <Button fx:id="createOrder" text="Create order" />
+        <Button fx:id="createOrder" text="Create order" onAction="#addOrder"/>
     </VBox>
 </AnchorPane>
