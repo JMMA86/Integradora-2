@@ -73,3 +73,14 @@ __Failure density:__ 2/8 = 0.25
 __Reliability:__ 1 - 0.25 = 0.75
 
 __Completeness:__ 8/7 = 1.14
+
+
+### __Iteration 6__
+
+__Commit:__ f7bf336
+
+__Failure density:__ 6/14 = 0.43
+
+__Reliability:__ 1 - 0.43 = 0.57
+
+__Completeness:__ 14/7 = 2
