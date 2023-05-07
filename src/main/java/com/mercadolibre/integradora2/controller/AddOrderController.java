@@ -97,6 +97,8 @@ public class AddOrderController implements Initializable {
     public void addOrder() {
         if (customerName.getText().isEmpty()) {
             MainApplication.showAlert("Error", "Please, enter customer name.", Alert.AlertType.ERROR);
+        } else if (products.isEmpty()) {
+            MainApplication.showAlert("Error", "Order is empty.", Alert.AlertType.ERROR);
         } else {
             MainApplication.showAlert("Log info", "Order added correctly.", Alert.AlertType.INFORMATION);
             MainApplication.getManager().addOrder(customerName.getText(), new ArrayList<>(products));
