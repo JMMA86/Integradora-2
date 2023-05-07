@@ -63,6 +63,7 @@ __Reliability:__ 1 - 0.0 = 1.0
 
 __Completeness:__ 11/7 = 1.57
 
+---
 
 ### __Iteration 5__
 
@@ -74,6 +75,7 @@ __Reliability:__ 1 - 0.25 = 0.75
 
 __Completeness:__ 8/7 = 1.14
 
+---
 
 ### __Iteration 6__
 
