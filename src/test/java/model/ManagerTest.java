@@ -5,6 +5,10 @@ import com.mercadolibre.integradora2.model.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -20,6 +24,19 @@ public class ManagerTest {
     void initialSetup() {
         manager = new Manager();
         rnd = new Random();
+    }
+    String getFileContent(String file) throws IOException {
+        return Files.readString(Path.of(System.getProperty("user.dir") + "/data/" + file));
+    }
+
+    private void setupEmptyInitialData() {
+        try {
+            Files.delete(Path.of(System.getProperty("user.dir") + "/data/orders.json"));
+            Files.delete(Path.of(System.getProperty("user.dir") + "/data/products.json"));
+        } catch(IOException e) {
+            e.getStackTrace();
+        }
+        manager.writeData();
     }
 
     // SETUPS
@@ -62,6 +79,12 @@ public class ManagerTest {
         manager.addOrder("Eric", new ArrayList<>(aux));
         aux = manager.getProducts().subList(1, 3);
         manager.addOrder("Julia", new ArrayList<>(aux));
+    }
+
+    void setupPreviouslySavedData() {
+        setupInitializeMultipleProducts();
+        setupInitializeMultipleOrders();
+        manager.writeData();
     }
 
     // Add Product Testing
@@ -293,5 +316,57 @@ public class ManagerTest {
     // Search Order testing
 
 
+    // Export to Json Testing
+
+    @Test
+    void exportToJsonEmptyData() throws IOException {
+        setupEmptyInitialData();
+        String previousOrders = getFileContent("orders.json");
+        String previousProducts = getFileContent("products.json");
+        manager.writeData();
+        String newOrders = getFileContent("orders.json");
+        String newProducts = getFileContent("products.json");
+        assertEquals(previousOrders, newOrders);
+        assertEquals(previousProducts, newProducts);
+    }
+
+    @Test
+    void exportToJsonNonEmptyData() throws IOException {
+        setupEmptyInitialData();
+        String previousOrders = getFileContent("orders.json");
+        String previousProducts = getFileContent("products.json");
+
+        // modifying the current data
+        try {
+            manager.addProduct("Sports Ball", "A ball...for sports", 10.5, 50, 8,40);
+        } catch(DuplicatedElementException e ) {
+            e.printStackTrace();
+        }
+        manager.addOrder("Yuluka", new ArrayList<>(manager.getProducts().subList(0,1)));
+
+        manager.writeData();
+        String newOrders = getFileContent("orders.json");
+        String newProducts = getFileContent("products.json");
+        assertNotEquals(previousOrders, newOrders);
+        assertNotEquals(previousProducts, newProducts);
+    }
+
+    // Import from Json Testing
+
+    @Test
+    void importFromJsonNonEmptyData() {
+        setupEmptyInitialData();
+        setupPreviouslySavedData();
+        assertNotEquals(manager.getProducts().size(), 0);
+        assertNotEquals(manager.getOrders().size(), 0);
+    }
+
+    @Test
+    void importFromJsonEmptyData() {
+        setupEmptyInitialData();
+        manager.readData();
+        assertEquals(manager.getProducts().size(), 0);
+        assertEquals(manager.getOrders().size(), 0);
+    }
 
 }

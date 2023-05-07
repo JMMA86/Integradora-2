@@ -63,6 +63,7 @@ __Reliability:__ 1 - 0.0 = 1.0
 
 __Completeness:__ 11/7 = 1.57
 
+---
 
 ### __Iteration 5__
 
@@ -74,6 +75,7 @@ __Reliability:__ 1 - 0.25 = 0.75
 
 __Completeness:__ 8/7 = 1.14
 
+---
 
 ### __Iteration 6__
 
@@ -84,3 +86,15 @@ __Failure density:__ 6/14 = 0.43
 __Reliability:__ 1 - 0.43 = 0.57
 
 __Completeness:__ 14/7 = 2
+
+---
+
+### __Iteration 7__
+
+__Commit:__ c1bbd54
+
+__Failure density:__ 6/18 = 0.33
+
+__Reliability:__ 1 - 0.33 = 0.67
+
+__Completeness:__ 18/7 = 2.57
