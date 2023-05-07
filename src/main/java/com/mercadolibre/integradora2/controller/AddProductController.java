@@ -54,6 +54,7 @@ public class AddProductController {
             MainApplication.showAlert("Done", "Product added correctly.", Alert.AlertType.INFORMATION);
             Stage stage = (Stage) addProductBtn.getScene().getWindow();
             stage.close();
+            MainApplication.renderView("management-view.fxml", "Management System", 720, 480);
         } catch (IllegalArgumentException e) {
             MainApplication.showAlert("Error", "Please, make sure all inputs are correct.", Alert.AlertType.ERROR);
         } catch (DuplicatedElementException e) {
@@ -64,5 +65,12 @@ public class AddProductController {
     @FXML
     public void updateAddBtn() {
         addProductBtn.setDisable(nameField.getText().isEmpty() || priceField.getText().isEmpty() || amountField.getText().isEmpty() || descriptionArea.getText().isEmpty() || category == -1);
+    }
+
+    @FXML
+    public void cancel() {
+        Stage stage = (Stage) addProductBtn.getScene().getWindow();
+        stage.close();
+        MainApplication.renderView("management-view.fxml", "Management System", 720, 480);
     }
 }

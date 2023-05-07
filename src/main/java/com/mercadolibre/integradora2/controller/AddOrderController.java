@@ -102,7 +102,15 @@ public class AddOrderController implements Initializable {
             MainApplication.getManager().addOrder(customerName.getText(), new ArrayList<>(products));
             Stage stage = (Stage) createOrderBtn.getScene().getWindow();
             stage.close();
+            MainApplication.renderView("management-view.fxml", "Management System", 720, 480);
         }
+    }
+
+    @FXML
+    public void cancel() {
+        Stage stage = (Stage) createOrderBtn.getScene().getWindow();
+        stage.close();
+        MainApplication.renderView("management-view.fxml", "Management System", 720, 480);
     }
 
     @Override

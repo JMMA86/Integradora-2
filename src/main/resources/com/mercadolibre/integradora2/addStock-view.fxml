@@ -13,6 +13,7 @@
         <HBox alignment="CENTER" spacing="10">
             <Spinner fx:id="stockNumber" prefWidth="70" editable="true"/>
             <Button fx:id="addStockBtn" text="Add Stock" onAction="#addStock"/>
+            <Button fx:id="cancelBtn" text="Cancel" onAction="#cancel"/>
         </HBox>
     </VBox>
 </AnchorPane>

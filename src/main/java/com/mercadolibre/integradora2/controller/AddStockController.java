@@ -2,6 +2,7 @@ package com.mercadolibre.integradora2.controller;
 
 import com.mercadolibre.integradora2.MainApplication;
 import com.mercadolibre.integradora2.model.Product;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -45,7 +46,15 @@ public class AddStockController implements Initializable {
             MainApplication.showAlert("Log info", "Stock changed successfully", Alert.AlertType.INFORMATION);
             Stage stage = (Stage) addStockBtn.getScene().getWindow();
             stage.close();
+            MainApplication.renderView("management-view.fxml", "Management System", 720, 480);
         }
+    }
+
+    @FXML
+    public void cancel() {
+        Stage stage = (Stage) addStockBtn.getScene().getWindow();
+        stage.close();
+        MainApplication.renderView("management-view.fxml", "Management System", 720, 480);
     }
 
     @Override

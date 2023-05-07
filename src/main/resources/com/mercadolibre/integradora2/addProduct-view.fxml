@@ -44,9 +44,10 @@
                 </VBox>
             </HBox>
         </VBox>
-        <VBox alignment="CENTER">
+        <HBox alignment="CENTER" spacing="10">
             <Button fx:id="addProductBtn" text="Add Product" disable="true" onAction="#AddProduct"/>
-        </VBox>
+            <Button fx:id="cancelBtn" text="Cancel" onAction="#cancel"/>
+        </HBox>
         <padding>
            <Insets left="10.0" />
         </padding>
