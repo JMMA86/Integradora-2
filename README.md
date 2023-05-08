@@ -1,7 +1,6 @@
 # Mercado libre products and orders manager
 
-This project is part of the solution for the integrative task of the algorithms
-and programming subject.
+This project the implementation of the Second Algorithms and Programming Integrative Task.
 
 ## __Contributors__
 
@@ -37,7 +36,7 @@ __Failure density:__ 1/5 = 0.2
 
 __Reliability:__ 1 - 1/5 = 0.8
 
-__Completeness:__ 5 / 7
+__Completeness:__ 5/7 = 0.71
 
 ---
 
