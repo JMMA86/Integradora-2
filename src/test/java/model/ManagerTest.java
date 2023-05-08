@@ -406,7 +406,7 @@ public class ManagerTest {
         setupInitializeMultipleProducts();
         String prefix = "ni";
         try {
-            Product[] output = manager.searchProductsByStrings(prefix, "oi", true);
+            Product[] output = manager.searchProductsByStrings(prefix, "ni", true);
             fail();
         } catch (NoSuchElementException e) {
             assertNotNull(e);

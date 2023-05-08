@@ -273,7 +273,7 @@ public class SearchController implements Initializable {
                 }
             }
         }
-        if (nameOrderPrefixRB.isSelected() || namePrefixRB.isSelected()) {
+        if (nameOrderSuffixRB.isSelected() || nameSuffixRB.isSelected()) {
             StringBuilder lower = new StringBuilder(lowerValueField.getText());
             StringBuilder higher = new StringBuilder(higherValueField.getText());
             if (higher.reverse().compareTo(lower.reverse()) < 0) {
