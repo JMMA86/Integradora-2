@@ -98,3 +98,15 @@ __Failure density:__ 6/18 = 0.33
 __Reliability:__ 1 - 0.33 = 0.67
 
 __Completeness:__ 18/7 = 2.57
+
+---
+
+### __Iteration 8__
+
+__Commit:__ 75d1ad2
+
+__Failure density:__ 0/18 = 0.0
+
+__Reliability:__ 1 - 0.0 = 1.0
+
+__Completeness:__ 18/7 = 2.57

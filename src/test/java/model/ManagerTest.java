@@ -195,7 +195,7 @@ public class ManagerTest {
         for(Product p : output) System.out.println(p.getPrice());
          */
 
-        // asssertion
+        // assertion
         assertEquals(output.length, foundProducts.size());
     }
 
@@ -345,6 +345,123 @@ public class ManagerTest {
     }
 
     // Search Order testing
+
+    @Test
+    void searchOrderByNamePrefix() {
+        setupInitializeMultipleOrders();
+
+        // linear verification
+        String prefix = "Ma";
+        ArrayList<Order> foundOrders = new ArrayList<>();
+        for(Order o : manager.getOrders()) {
+            if( o.getCustomerName().startsWith(prefix) ) {
+                foundOrders.add(o);
+            }
+        }
+        foundOrders.sort(Comparator.comparing(Order::getCustomerName));
+
+        // binary search
+        Order[] output = manager.searchOrdersByCustomersNames(prefix, "Me", false);
+
+        /*
+        print for debugging
+        System.out.println("expected");
+        for(Order o : foundOrders) System.out.println(o.getCustomerName());
+        System.out.println("output:");
+        for(Order o : output) System.out.println(o.getCustomerName());
+         */
+
+        // assertion
+        assertEquals(foundOrders.size(), output.length);
+    }
+
+
+    @Test
+    void searchOrderByNameSuffix() {
+        setupInitializeMultipleOrders();
+
+        // linear verification
+        String suffix = "a";
+        ArrayList<Order> foundOrders = new ArrayList<>();
+        for(Order o : manager.getOrders()) {
+            if( o.getCustomerName().endsWith(suffix) ) {
+                foundOrders.add(o);
+            }
+        }
+        foundOrders.sort(Comparator.comparing(Order::getCustomerName));
+
+        // binary search
+        Order[] output = manager.searchOrdersByCustomersNames(suffix, "b", true);
+
+        /*
+        print for debugging
+        System.out.println("expected");
+        for(Order o : foundOrders) System.out.println(o.getCustomerName());
+        System.out.println("output:");
+        for(Order o : output) System.out.println(o.getCustomerName());
+         */
+
+        // assertion
+        assertEquals(foundOrders.size(), output.length);
+    }
+
+    @Test
+    void searchOrderByDate() {
+        setupInitializeMultipleOrders();
+
+        // linear verification
+        String prefix = LocalDate.now().toString();
+        ArrayList<Order> foundOrders = new ArrayList<>();
+        for(Order o : manager.getOrders()) {
+            if( o.getDATE().startsWith(prefix) ) {
+                foundOrders.add(o);
+            }
+        }
+        foundOrders.sort(Comparator.comparing(Order::getDATE));
+
+        // binary search
+        Order[] output = manager.searchOrdersByDate(prefix, prefix);
+
+        /*
+        print for debugging
+        System.out.println("expected");
+        for(Order o : foundOrders) System.out.println(o.getDATE());
+        System.out.println("output:");
+        for(Order o : output) System.out.println(o.getDATE());
+         */
+
+        // assertion
+        assertEquals(foundOrders.size(), output.length);
+    }
+
+    @Test
+    void searchOrderByTotalPrice() {
+        setupInitializeMultipleOrders();
+
+        // linear verification
+        double lower = 80.2, upper = 200.2;
+        ArrayList<Order> foundOrders = new ArrayList<>();
+        for(Order o : manager.getOrders()) {
+            if(o.getTotalPrice() >= lower && o.getTotalPrice() <= upper ) {
+                foundOrders.add(o);
+                System.out.println(o.getTotalPrice());
+            }
+        }
+
+        // binary search
+        Order[] output = manager.searchOrdersByTotalPrice(lower, upper);
+
+        /*
+        print for debugging
+        System.out.println("expected:");
+        for(Order o : foundOrders) System.out.println(o.getTotalPrice());
+        System.out.println("output:");
+        for(Order o : output) System.out.println(o.getTotalPrice());
+         */
+
+        // assertion
+        assertEquals(output.length, foundOrders.size());
+    }
 
 
     // Export to Json Testing
