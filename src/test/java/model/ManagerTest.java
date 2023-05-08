@@ -191,6 +191,7 @@ public class ManagerTest {
                 foundProducts.add(p);
             }
         }
+        foundProducts.sort(Comparator.comparing(Product::getCategory));
 
         // binary search
         Product[] output = manager.searchProductsByCategory(ProductCategory.values()[lower-1], ProductCategory.values()[upper-1]);
@@ -202,7 +203,7 @@ public class ManagerTest {
         for(Product p : output) System.out.println(p.getCategory().ordinal());
 
         // assertion
-        assertEquals(output.length, foundProducts.size());
+        assertEquals(foundProducts.size(), output.length);
     }
 
     @Test
@@ -251,9 +252,9 @@ public class ManagerTest {
 
         // print for debugging
         System.out.println("expected:");
-        for(Product p : foundProducts) System.out.println(p.getName());
+        for(Product p : foundProducts) System.out.println(p.getTimesBought());
         System.out.println("output:");
-        for(Product p : output) System.out.println(p.getName());
+        for(Product p : output) System.out.println(p.getTimesBought());
 
         // assertion
         assertEquals(foundProducts.size(), output.length);
@@ -274,7 +275,7 @@ public class ManagerTest {
         foundProducts.sort(Comparator.comparing(Product::getName));
 
         // binary search
-        Product[] output = manager.searchProductsByStrings(prefix, prefix, false);
+        Product[] output = manager.searchProductsByStrings(prefix, "Nj", false);
 
         // print for debugging
         System.out.println("expected");
@@ -283,7 +284,7 @@ public class ManagerTest {
         for(Product p : output) System.out.println(p.getName());
 
         // assertion
-        assertEquals(output.length, foundProducts.size());
+        assertEquals(foundProducts.size(), output.length);
     }
 
     @Test
@@ -301,7 +302,7 @@ public class ManagerTest {
         foundProducts.sort(Comparator.comparing(Product::getName));
 
         // binary search
-        Product[] output = manager.searchProductsByStrings(suffix, suffix, true);
+        Product[] output = manager.searchProductsByStrings(suffix, "pne", true);
 
         // print for debugging
         System.out.println("expected");
@@ -310,7 +311,7 @@ public class ManagerTest {
         for(Product p : output) System.out.println(p.getName());
 
         // assertion
-        assertEquals(output.length, foundProducts.size());
+        assertEquals(foundProducts.size(), output.length);
     }
 
     // Search Order testing

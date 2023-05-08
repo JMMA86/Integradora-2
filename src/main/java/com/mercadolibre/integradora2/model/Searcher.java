@@ -35,31 +35,33 @@ public class Searcher<T extends Comparable<T>, E> {
         if (l_approx >= arr.length) throw new NoSuchElementException("The element was not found");
 
         if (arr[l_approx].compareTo(lt) >= 0) {
-            if (l_approx > 0 && arr[l_approx - 1].compareTo(lt) >= 0) {
-                xl = l_approx - 1;
-            } else {
-                xl = l_approx;
-            }
+            xl = l_approx;
         } else {
             xl = l_approx + 1;
+        }
+
+        for (int i = xl; i >= 0 && arr[i].compareTo(lt) == 0; i--) {
+            xl = i;
         }
 
         int r_approx = binarySearch(arr, rt, xl, arr.length - 1, true);
 
         if (r_approx >= arr.length) throw new NoSuchElementException("The element was not found");
 
-        System.out.println("Right: " + r_approx);
-
-        if (rt.compareTo(arr[r_approx]) <= 0) {
-            if (r_approx < arr.length - 1 && rt.compareTo(arr[r_approx + 1]) <= 0) {
-                xr = r_approx + 1;
-            } else {
-                xr = r_approx;
-            }
+        System.out.println("RT: " + rt);
+        System.out.println("R: " + arr[r_approx]);
+        if (rt.compareTo(arr[r_approx]) >= 0) {
+            xr = r_approx;
         } else {
             xr = r_approx - 1;
         }
 
+        //If a single element is found and we haven't met the limit that matches
+        for (int i = xr; i < arr.length && arr[i].compareTo(rt) == 0; i++) {
+            xr = i;
+        }
+
+        System.out.println("Right: " + xr);
 
         ArrayList<E> result = new ArrayList<>();
 
