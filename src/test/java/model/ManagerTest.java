@@ -1,6 +1,7 @@
 package model;
 
 import com.mercadolibre.integradora2.exception.DuplicatedElementException;
+import com.mercadolibre.integradora2.exception.EmptyOrderException;
 import com.mercadolibre.integradora2.model.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,6 +25,7 @@ public class ManagerTest {
     void initialSetup() {
         manager = new Manager();
         rnd = new Random();
+        setupEmptyInitialData();
     }
     String getFileContent(String file) throws IOException {
         return Files.readString(Path.of(System.getProperty("user.dir") + "/data/" + file));
@@ -36,6 +38,12 @@ public class ManagerTest {
         } catch(IOException e) {
             e.getStackTrace();
         }
+        manager.writeData();
+    }
+
+    void setupPreviouslySavedData() {
+        setupInitializeMultipleProducts();
+        setupInitializeMultipleOrders();
         manager.writeData();
     }
 
@@ -60,31 +68,29 @@ public class ManagerTest {
             manager.addProduct("Staedtler Triplus Fineliner Pens", "Fine tip colored pens for precise writing", 14.99, 75, 5, 30);
             manager.addProduct("The integrative task", "To suffer", 10.0, 2, 6, 15);
         } catch(DuplicatedElementException e) {
-            e.printStackTrace();
+            e.getStackTrace();
         }
     }
 
     void setupInitializeMultipleOrders() {
         setupInitializeMultipleProducts();
         List<Product> aux;
-        aux = manager.getProducts().subList(0, 3);
-        manager.addOrder("Mario", new ArrayList<>(aux));
-        aux = manager.getProducts().subList(1, 2);
-        manager.addOrder("Martinez", new ArrayList<>(aux));
-        aux = manager.getProducts().subList(0, 1);
-        manager.addOrder("Felipe", new ArrayList<>(aux));
-        aux = manager.getProducts().subList(3, 6);
-        manager.addOrder("Jessica", new ArrayList<>(aux));
-        aux = manager.getProducts().subList(2, 4);
-        manager.addOrder("Eric", new ArrayList<>(aux));
-        aux = manager.getProducts().subList(1, 3);
-        manager.addOrder("Julia", new ArrayList<>(aux));
-    }
-
-    void setupPreviouslySavedData() {
-        setupInitializeMultipleProducts();
-        setupInitializeMultipleOrders();
-        manager.writeData();
+        try {
+            aux = manager.getProducts().subList(0, 3);
+            manager.addOrder("Mario", new ArrayList<>(aux));
+            aux = manager.getProducts().subList(1, 2);
+            manager.addOrder("Martinez", new ArrayList<>(aux));
+            aux = manager.getProducts().subList(0, 1);
+            manager.addOrder("Felipe", new ArrayList<>(aux));
+            aux = manager.getProducts().subList(3, 6);
+            manager.addOrder("Jessica", new ArrayList<>(aux));
+            aux = manager.getProducts().subList(2, 4);
+            manager.addOrder("Eric", new ArrayList<>(aux));
+            aux = manager.getProducts().subList(1, 3);
+            manager.addOrder("Julia", new ArrayList<>(aux));
+        } catch(EmptyOrderException e) {
+            e.getStackTrace();
+        }
     }
 
     // Add Product Testing
@@ -119,7 +125,11 @@ public class ManagerTest {
     @Test
     void addOrderSingleProduct() {
         setupInitializeMultipleProducts();
-        manager.addOrder("Yuluka", new ArrayList<>(manager.getProducts().subList(0,1)));
+        try {
+            manager.addOrder("Yuluka", new ArrayList<>(manager.getProducts().subList(0,1)));
+        } catch (EmptyOrderException e) {
+            throw new RuntimeException(e);
+        }
         assertEquals(manager.getOrders().size(), 1);
         assertEquals(manager.getOrders().get(0).getProducts().size(),1);
     }
@@ -127,7 +137,11 @@ public class ManagerTest {
     @Test
     void addOrderMultipleProducts() {
         setupInitializeMultipleProducts();
-        manager.addOrder("Yuluka", new ArrayList<>(manager.getProducts().subList(0,manager.getProducts().size()))  );
+        try {
+            manager.addOrder("Yuluka", new ArrayList<>(manager.getProducts().subList(0,manager.getProducts().size()))  );
+        } catch (EmptyOrderException e) {
+            throw new RuntimeException(e);
+        }
         assertEquals(manager.getOrders().size(), 1);
         assertEquals(manager.getOrders().get(0).getProducts().size(), manager.getProducts().size());
     }
@@ -135,14 +149,18 @@ public class ManagerTest {
     @Test
     void addOrderEmptyOrder() {
         setupInitializeMultipleProducts();
-        assertThrows(Exception.class, () -> manager.addOrder("Yuluka", new ArrayList<>()));
+        assertThrows(EmptyOrderException.class, () -> manager.addOrder("Yuluka", new ArrayList<>()));
     }
 
     @Test
     void addRepeatedOrder() {
         setupInitializeMultipleOrders();
         int initialAmount = manager.getOrders().size();
-        manager.addOrder(manager.getOrders().get(0).getCustomerName(), new ArrayList<>(manager.getProducts().subList(0,1)));
+        try {
+            manager.addOrder(manager.getOrders().get(0).getCustomerName(), new ArrayList<>(manager.getProducts().subList(0,1)));
+        } catch (EmptyOrderException e) {
+            throw new RuntimeException(e);
+        }
         assertEquals(manager.getOrders().size(), initialAmount+1);
     }
 
@@ -169,11 +187,13 @@ public class ManagerTest {
         // binary search
         Product[] output = manager.searchProductByPrice(lower, upper);
 
-        // print for debugging
+        /*
+        print for debugging
         System.out.println("expected:");
         for(Product p : foundProducts) System.out.println(p.getPrice());
         System.out.println("output:");
         for(Product p : output) System.out.println(p.getPrice());
+         */
 
         // asssertion
         assertEquals(output.length, foundProducts.size());
@@ -196,11 +216,13 @@ public class ManagerTest {
         // binary search
         Product[] output = manager.searchProductsByCategory(ProductCategory.values()[lower-1], ProductCategory.values()[upper-1]);
 
-        // print for debugging
+        /*
+        print for debugging
         System.out.println("expected:");
         for(Product p : foundProducts) System.out.println(p.getCategory().ordinal());
         System.out.println("output:");
         for(Product p : output) System.out.println(p.getCategory().ordinal());
+         */
 
         // assertion
         assertEquals(foundProducts.size(), output.length);
@@ -223,11 +245,13 @@ public class ManagerTest {
         // binary search
         Product[] output = manager.searchProductByAmount(lower, upper);
 
-        // print for debugging
+        /*
+        print for debugging
         System.out.println("expected");
         for(Product p : foundProducts) System.out.println(p.getAmount());
         System.out.println("output:");
         for(Product p : output) System.out.println(p.getAmount());
+         */
 
         // assertion
         assertEquals(output.length, foundProducts.size());
@@ -250,11 +274,13 @@ public class ManagerTest {
         // binary search
         Product[] output = manager.searchProductsByTimesBought(lower, upper);
 
-        // print for debugging
+        /*
+        print for debugging
         System.out.println("expected:");
         for(Product p : foundProducts) System.out.println(p.getTimesBought());
         System.out.println("output:");
         for(Product p : output) System.out.println(p.getTimesBought());
+         */
 
         // assertion
         assertEquals(foundProducts.size(), output.length);
@@ -277,11 +303,13 @@ public class ManagerTest {
         // binary search
         Product[] output = manager.searchProductsByStrings(prefix, "Nj", false);
 
-        // print for debugging
+        /*
+        print for debugging
         System.out.println("expected");
         for(Product p : foundProducts) System.out.println(p.getName());
         System.out.println("output:");
         for(Product p : output) System.out.println(p.getName());
+         */
 
         // assertion
         assertEquals(foundProducts.size(), output.length);
@@ -304,11 +332,13 @@ public class ManagerTest {
         // binary search
         Product[] output = manager.searchProductsByStrings(suffix, "pne", true);
 
-        // print for debugging
+
+        /* print for debugging
         System.out.println("expected");
         for(Product p : foundProducts) System.out.println(p.getName());
         System.out.println("output:");
         for(Product p : output) System.out.println(p.getName());
+         */
 
         // assertion
         assertEquals(foundProducts.size(), output.length);
@@ -321,7 +351,6 @@ public class ManagerTest {
 
     @Test
     void exportToJsonEmptyData() throws IOException {
-        setupEmptyInitialData();
         String previousOrders = getFileContent("orders.json");
         String previousProducts = getFileContent("products.json");
         manager.writeData();
@@ -333,7 +362,6 @@ public class ManagerTest {
 
     @Test
     void exportToJsonNonEmptyData() throws IOException {
-        setupEmptyInitialData();
         String previousOrders = getFileContent("orders.json");
         String previousProducts = getFileContent("products.json");
 
@@ -343,7 +371,11 @@ public class ManagerTest {
         } catch(DuplicatedElementException e ) {
             e.printStackTrace();
         }
-        manager.addOrder("Yuluka", new ArrayList<>(manager.getProducts().subList(0,1)));
+        try {
+            manager.addOrder("Yuluka", new ArrayList<>(manager.getProducts().subList(0,1)));
+        } catch (EmptyOrderException e) {
+            throw new RuntimeException(e);
+        }
 
         manager.writeData();
         String newOrders = getFileContent("orders.json");
@@ -356,7 +388,6 @@ public class ManagerTest {
 
     @Test
     void importFromJsonNonEmptyData() {
-        setupEmptyInitialData();
         setupPreviouslySavedData();
         assertNotEquals(manager.getProducts().size(), 0);
         assertNotEquals(manager.getOrders().size(), 0);
@@ -364,7 +395,6 @@ public class ManagerTest {
 
     @Test
     void importFromJsonEmptyData() {
-        setupEmptyInitialData();
         manager.readData();
         assertEquals(manager.getProducts().size(), 0);
         assertEquals(manager.getOrders().size(), 0);

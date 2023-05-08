@@ -2,6 +2,7 @@ package com.mercadolibre.integradora2.model;
 
 import com.google.gson.Gson;
 import com.mercadolibre.integradora2.exception.DuplicatedElementException;
+import com.mercadolibre.integradora2.exception.EmptyOrderException;
 
 import java.io.*;
 import java.lang.reflect.Array;
@@ -87,7 +88,8 @@ public class Manager {
         }
     }
 
-    public void addOrder(String customerName, ArrayList<Product> products) {
+    public void addOrder(String customerName, ArrayList<Product> products) throws EmptyOrderException {
+        if(products.isEmpty()) throw new EmptyOrderException("The order is empty");
         Order newOrder = new Order(customerName, products);
         orders.add(newOrder);
     }

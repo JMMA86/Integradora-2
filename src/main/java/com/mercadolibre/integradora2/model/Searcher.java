@@ -48,8 +48,6 @@ public class Searcher<T extends Comparable<T>, E> {
 
         if (r_approx >= arr.length) throw new NoSuchElementException("The element was not found");
 
-        System.out.println("RT: " + rt);
-        System.out.println("R: " + arr[r_approx]);
         if (rt.compareTo(arr[r_approx]) >= 0) {
             xr = r_approx;
         } else {
@@ -60,8 +58,6 @@ public class Searcher<T extends Comparable<T>, E> {
         for (int i = xr; i < arr.length && arr[i].compareTo(rt) == 0; i++) {
             xr = i;
         }
-
-        System.out.println("Right: " + xr);
 
         ArrayList<E> result = new ArrayList<>();
 
