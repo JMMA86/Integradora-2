@@ -183,10 +183,10 @@ public class Manager {
 
         //Checking if the search is by prefix or suffix
         if (suffix) {
-            upper = formatStringForSearch(upper, true);
             //Reversing the order because the elements will be ordered in reverse by suffix
             lower = new StringBuilder(lower).reverse().toString();
             upper = new StringBuilder(upper).reverse().toString();
+            upper = formatStringForSearch(upper, true);
             //Sorting the elements by comparing the key
             //KeyExtractor is part of the functional programming implemented in java
             //Function is a functional interface that accepts a value and returns an result
@@ -369,13 +369,14 @@ public class Manager {
     }
 
     private String formatStringForSearch(String upper, boolean inverse) {
-        char original = upper.charAt(0);
+        char original = upper.charAt(upper.length() - 1);
         int newAscii = inverse ? 1 + (int) original : (int) original - 1;
         char newChar = (char) newAscii;
+        StringBuilder temp = new StringBuilder();
         if (upper.length() > 1) {
-            upper = "" + newChar + upper.subSequence(1, upper.length());
+            upper =  temp.append(upper, 0, upper.length() - 1).append(newChar).toString();
         } else {
-            upper = "" + newChar;
+            upper = temp.append(newChar).toString();
         }
         return upper;
     }

@@ -137,10 +137,6 @@ public class SearchController implements Initializable {
     public void searchProduct() {
         productTable.setItems(null);
         orderTable.setItems(null);
-        if (higherValueField.getText().trim().compareTo(lowerValueField.getText().trim()) < 0) {
-            MainApplication.showAlert("Error", "Invalid intervals.", Alert.AlertType.ERROR);
-            return;
-        }
         if (searcherSelector.getValue().equals("Product Searcher")) {
             ObservableList<Product> result;
             if (priceRB.isSelected()) {
@@ -276,6 +272,17 @@ public class SearchController implements Initializable {
                     MainApplication.showAlert("Error", "No products found. Check out inputs are in the correct format (AAAA-MM-DD).", Alert.AlertType.ERROR);
                 }
             }
+        }
+        if (nameOrderSuffixRB.isSelected() || nameSuffixRB.isSelected()) {
+            StringBuilder lower = new StringBuilder(lowerValueField.getText());
+            StringBuilder higher = new StringBuilder(higherValueField.getText());
+            if (higher.reverse().compareTo(lower.reverse()) < 0) {
+                MainApplication.showAlert("Error", "Invalid intervals.", Alert.AlertType.ERROR);
+                return;
+            }
+        } else if (higherValueField.getText().trim().compareTo(lowerValueField.getText().trim()) < 0) {
+            MainApplication.showAlert("Error", "Invalid intervals.", Alert.AlertType.ERROR);
+            return;
         }
     }
     @FXML
