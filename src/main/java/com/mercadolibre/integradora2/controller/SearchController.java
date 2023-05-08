@@ -12,7 +12,12 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import javafx.util.converter.FormatStringConverter;
+import javafx.util.converter.LocalDateStringConverter;
+
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.*;
 
 public class SearchController implements Initializable {
@@ -114,7 +119,7 @@ public class SearchController implements Initializable {
     }
     @FXML
     public void updateSearchBtn() {
-        searchBtn.setDisable(lowerValueField.getText().isEmpty() || higherValueField.getText().isEmpty());
+        searchBtn.setDisable(lowerValueField.getText().trim().isEmpty() || higherValueField.getText().trim().isEmpty());
         if (categoryRB.isSelected()) {
             searchBtn.setDisable(false);
             lowerValueField.setVisible(false);
@@ -132,7 +137,7 @@ public class SearchController implements Initializable {
     public void searchProduct() {
         productTable.setItems(null);
         orderTable.setItems(null);
-        if (higherValueField.getText().compareTo(lowerValueField.getText()) < 0) {
+        if (higherValueField.getText().trim().compareTo(lowerValueField.getText().trim()) < 0) {
             MainApplication.showAlert("Error", "Invalid intervals.", Alert.AlertType.ERROR);
             return;
         }
@@ -182,7 +187,7 @@ public class SearchController implements Initializable {
             }
             if (categoryRB.isSelected()) {
                 try {
-                    result = FXCollections.observableArrayList(new ArrayList<>(Arrays.asList(MainApplication.getManager().searchProductsByCategory(categorySelector.getValue(), categorySelector.getValue()))));
+                    result = FXCollections.observableArrayList(new ArrayList<>(Arrays.asList(MainApplication.getManager().searchProductsByCategory(categorySelector.getValue()))));
                     if (orderSelector.getValue().equals("Descending Order")) {
                         Collections.reverse(result);
                     }
@@ -259,12 +264,15 @@ public class SearchController implements Initializable {
             }
             if (dateRB.isSelected()) {
                 try {
+                    LocalDate lowerDate = LocalDate.parse(lowerValueField.getText());
+                    LocalDate upperDate = LocalDate.parse(higherValueField.getText());
+
                     result = FXCollections.observableArrayList(new ArrayList<>(Arrays.asList(MainApplication.getManager().searchOrdersByDate(lowerValueField.getText(), higherValueField.getText()))));
                     if (orderSelector.getValue().equals("Descending Order")) {
                         Collections.reverse(result);
                     }
                     orderTable.setItems(result);
-                } catch (NoSuchElementException e) {
+                } catch (NoSuchElementException | DateTimeParseException e) {
                     MainApplication.showAlert("Error", "No products found. Check out inputs are in the correct format (AAAA-MM-DD).", Alert.AlertType.ERROR);
                 }
             }

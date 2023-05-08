@@ -28,7 +28,7 @@ public class Searcher<T extends Comparable<T>, E> {
 
         //If the first element coincides with the last element in an ordered array it means that all the
         //elements are the same length, which means that we'll have to return all the elements
-        if (lt.equals(rt) && arr[0].equals(lt) && arr[arr.length - 1].equals(rt)) return elements;
+        if (elements.size() != 0 && lt.equals(rt) && arr[0].equals(lt) && arr[arr.length - 1].equals(rt)) return elements;
 
         int l_approx = binarySearch(arr, lt, 0, arr.length - 1, true);
 
@@ -57,7 +57,7 @@ public class Searcher<T extends Comparable<T>, E> {
         }
 
         //If a single element is found and we haven't met the limit that matches
-        for (int i = xr; i < arr.length && arr[i].compareTo(rt) == 0; i++) {
+        for (int i = xr; i >= 0 && i < arr.length && arr[i].compareTo(rt) == 0; i++) {
             xr = i;
         }
 
@@ -66,6 +66,8 @@ public class Searcher<T extends Comparable<T>, E> {
         for (int i = xl; i <= xr; i++) {
             result.add(elements.get(i));
         }
+
+        if (result.size() == 0) throw new NoSuchElementException("The element was not found");
 
         return result;
     }

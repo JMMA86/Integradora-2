@@ -1,6 +1,7 @@
 package com.mercadolibre.integradora2.controller;
 
 import com.mercadolibre.integradora2.MainApplication;
+import com.mercadolibre.integradora2.exception.EmptyOrderException;
 import com.mercadolibre.integradora2.model.Product;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -94,7 +95,7 @@ public class AddOrderController implements Initializable {
         return false;
     }
 
-    public void addOrder() {
+    public void addOrder() throws EmptyOrderException {
         if (customerName.getText().isEmpty()) {
             MainApplication.showAlert("Error", "Please, enter customer name.", Alert.AlertType.ERROR);
         } else if (products.isEmpty()) {

@@ -179,10 +179,7 @@ public class Manager {
         //The keys that are going to be subtracted from the original array
         String[] stringKeys;
 
-        //Setting both limits to the same length
-        String[] limits = setStringLengths(lower, upper);
-        lower = limits[0];
-        upper = limits[1];
+        upper = formatStringForSearch(upper, false);
 
         //Checking if the search is by prefix or suffix
         if (suffix) {
@@ -266,15 +263,14 @@ public class Manager {
      * <p>
      * The productCategory1 ordinal must be smaller than the productCategory2 ordinal.
      *
-     * @param productCategory1 The lower limit to search
-     * @param productCategory2 The upper limit to search
+     * @param productCategory The category to search
      * @return An array filled with all the products with those categories
      * @throws NoSuchElementException When a category is not registered in any product.
      */
-    public Product[] searchProductsByCategory(ProductCategory productCategory1, ProductCategory productCategory2) throws NoSuchElementException {
+    public Product[] searchProductsByCategory(ProductCategory productCategory) throws NoSuchElementException {
         return integerSearchControl(
-                productCategory1.ordinal(),
-                productCategory2.ordinal(),
+                productCategory.ordinal(),
+                productCategory.ordinal(),
                 Comparator.comparing(Product::getCategory),
                 products.stream()
                         .map(Product::getCategory)
@@ -366,33 +362,20 @@ public class Manager {
      * @return An array of Order objects
      */
     public Order[] searchOrdersByDate(String lower, String upper) {
+        upper = formatStringForSearch(upper, true);
         return searchElementsByStrings(orders, lower, upper, false, Order::getDATE);
     }
 
-    /**
-     * This function selects the bigger string length and set it to the
-     * other string, this function does not add any character, it works with the
-     * StringBuilder java class and only adds null sections equals to \u0000
-     * till both lengths are equals.
-     *
-     * @param string1 First string
-     * @param string2 Second string
-     * @return An array of strings with the two strings given with the same length
-     */
-    private String[] setStringLengths(String string1, String string2) {
-        StringBuilder temp;
-
-        if (string1.length() > string2.length()) {
-            temp = new StringBuilder(string2);
-            temp.setLength(string1.length());
-            string2 = temp.toString();
+    private String formatStringForSearch(String upper, boolean inverse) {
+        char original = upper.charAt(0);
+        int newAscii = inverse ? 1 + (int) original : 1 - (int) original;
+        char newChar = (char) newAscii;
+        if (upper.length() > 1) {
+            upper = "" + newChar + upper.subSequence(1, upper.length());
         } else {
-            temp = new StringBuilder(string1);
-            temp.setLength(string2.length());
-            string1 = temp.toString();
+            upper = "" + newChar;
         }
-
-        return new String[]{string1, string2};
+        return upper;
     }
 
     public ArrayList<Product> getProducts() {

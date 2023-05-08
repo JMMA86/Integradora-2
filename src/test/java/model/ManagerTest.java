@@ -228,17 +228,17 @@ public class ManagerTest {
         setupInitializeMultipleProducts();
 
         // linear verification
-        int lower = 2, upper = 4;
+        int upper = 4;
         ArrayList<Product> foundProducts = new ArrayList<>();
         for(Product p : manager.getProducts()) {
-            if(p.getCategory().ordinal() >= lower-1 && p.getCategory().ordinal() <= upper-1 ) {
+            if(p.getCategory().ordinal() == upper-1 ) {
                 foundProducts.add(p);
             }
         }
         foundProducts.sort(Comparator.comparing(Product::getCategory));
 
         // binary search
-        Product[] output = manager.searchProductsByCategory(ProductCategory.values()[lower-1], ProductCategory.values()[upper-1]);
+        Product[] output = manager.searchProductsByCategory(ProductCategory.values()[upper-1]);
 
         /*
         print for debugging
@@ -255,8 +255,8 @@ public class ManagerTest {
     @Test
     void searchProductsByPriceInvalidCategories() {
         setupInitializeMultipleProducts();
-        int lower = -1, upper = 4;
-        assertThrows(IndexOutOfBoundsException.class, () -> manager.searchProductsByCategory(ProductCategory.values()[lower], ProductCategory.values()[upper]));
+        int lower = -1, upper = -1;
+        assertThrows(IndexOutOfBoundsException.class, () -> manager.searchProductsByCategory(ProductCategory.values()[upper]));
     }
 
     @Test
@@ -364,8 +364,12 @@ public class ManagerTest {
     void searchProductByPrefixNotFoundElements() {
         setupInitializeMultipleProducts();
         String prefix = "Zh";
-        Product[] output = manager.searchProductsByStrings(prefix, "Zi", false);
-        assertEquals(output.length, 0);
+        try {
+            Product[] output = manager.searchProductsByStrings(prefix, "Zh", false);
+            fail();
+        } catch (NoSuchElementException e) {
+            assertNotNull(e);
+        }
     }
 
     @Test
@@ -383,7 +387,7 @@ public class ManagerTest {
         foundProducts.sort(Comparator.comparing(Product::getName));
 
         // binary search
-        Product[] output = manager.searchProductsByStrings(suffix, "pne", true);
+        Product[] output = manager.searchProductsByStrings(suffix, "one", true);
 
 
         /* print for debugging
@@ -401,8 +405,12 @@ public class ManagerTest {
     void searchProductBySuffixNotFoundElements() {
         setupInitializeMultipleProducts();
         String prefix = "ni";
-        Product[] output = manager.searchProductsByStrings(prefix, "oi", true);
-        assertEquals(output.length, 0);
+        try {
+            Product[] output = manager.searchProductsByStrings(prefix, "oi", true);
+            fail();
+        } catch (NoSuchElementException e) {
+            assertNotNull(e);
+        }
     }
 
     // Search Order testing
@@ -477,8 +485,12 @@ public class ManagerTest {
     void searchOrderBySuffixNotFoundElements() {
         setupInitializeMultipleOrders();
         String suffix = "aer";
-        Order[] output = manager.searchOrdersByCustomersNames(suffix, "ber", true);
-        assertEquals(output.length, 0);
+        try {
+            Order[] output = manager.searchOrdersByCustomersNames(suffix, suffix, true);
+            fail();
+        } catch (NoSuchElementException e) {
+            assertNotNull(e);
+        }
     }
 
 
