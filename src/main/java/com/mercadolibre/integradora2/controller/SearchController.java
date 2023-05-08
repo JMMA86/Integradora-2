@@ -6,13 +6,11 @@ import com.mercadolibre.integradora2.model.Product;
 import com.mercadolibre.integradora2.model.ProductCategory;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
-
 import java.net.URL;
 import java.util.*;
 
@@ -203,6 +201,7 @@ public class SearchController implements Initializable {
                 } catch (NoSuchElementException e) {
                     MainApplication.showAlert("Error", "No products found.", Alert.AlertType.ERROR);
                 }
+                return;
             }
             if (namePrefixRB.isSelected()) {
                 try {
@@ -216,7 +215,56 @@ public class SearchController implements Initializable {
                 }
             }
         } else {
-
+            ObservableList<Order> result;
+            if (nameOrderPrefixRB.isSelected()) {
+                try {
+                    result = FXCollections.observableArrayList(new ArrayList<>(Arrays.asList(MainApplication.getManager().searchOrdersByCustomersNames(lowerValueField.getText(), higherValueField.getText(), false))));
+                    if (orderSelector.getValue().equals("Descending Order")) {
+                        Collections.reverse(result);
+                    }
+                    orderTable.setItems(result);
+                } catch (NoSuchElementException e) {
+                    MainApplication.showAlert("Error", "No products found.", Alert.AlertType.ERROR);
+                }
+                return;
+            }
+            if (nameOrderSuffixRB.isSelected()) {
+                try {
+                    result = FXCollections.observableArrayList(new ArrayList<>(Arrays.asList(MainApplication.getManager().searchOrdersByCustomersNames(lowerValueField.getText(), higherValueField.getText(), true))));
+                    if (orderSelector.getValue().equals("Descending Order")) {
+                        Collections.reverse(result);
+                    }
+                    orderTable.setItems(result);
+                } catch (NoSuchElementException e) {
+                    MainApplication.showAlert("Error", "No products found.", Alert.AlertType.ERROR);
+                }
+                return;
+            }
+            if (priceOrderRB.isSelected()) {
+                try {
+                    result = FXCollections.observableArrayList(new ArrayList<>(Arrays.asList(MainApplication.getManager().searchOrdersByTotalPrice(Double.parseDouble(lowerValueField.getText()), Double.parseDouble(higherValueField.getText())))));
+                    if (orderSelector.getValue().equals("Descending Order")) {
+                        Collections.reverse(result);
+                    }
+                    orderTable.setItems(result);
+                } catch (NumberFormatException e) {
+                    MainApplication.showAlert("Error", "Invalid intervals.", Alert.AlertType.ERROR);
+                } catch (NoSuchElementException e) {
+                    MainApplication.showAlert("Error", "No products found.", Alert.AlertType.ERROR);
+                }
+                return;
+            }
+            if (dateRB.isSelected()) {
+                try {
+                    result = FXCollections.observableArrayList(new ArrayList<>(Arrays.asList(MainApplication.getManager().searchOrdersByDate(lowerValueField.getText(), higherValueField.getText()))));
+                    if (orderSelector.getValue().equals("Descending Order")) {
+                        Collections.reverse(result);
+                    }
+                    orderTable.setItems(result);
+                } catch (NoSuchElementException e) {
+                    MainApplication.showAlert("Error", "No products found. Check out inputs are in the correct format (AAAA-MM-DD).", Alert.AlertType.ERROR);
+                }
+            }
         }
     }
     @FXML
