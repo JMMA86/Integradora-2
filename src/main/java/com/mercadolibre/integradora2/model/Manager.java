@@ -179,10 +179,11 @@ public class Manager {
         //The keys that are going to be subtracted from the original array
         String[] stringKeys;
 
-        upper = formatStringForSearch(upper, false);
+
 
         //Checking if the search is by prefix or suffix
         if (suffix) {
+            upper = formatStringForSearch(upper, true);
             //Reversing the order because the elements will be ordered in reverse by suffix
             lower = new StringBuilder(lower).reverse().toString();
             upper = new StringBuilder(upper).reverse().toString();
@@ -201,6 +202,7 @@ public class Manager {
                     .map(str -> new StringBuilder(str).reverse().toString())
                     .toArray(String[]::new);
         } else {
+            upper = formatStringForSearch(upper, true);
             //Does the same logic as with suffix, but this one extracts
             //the key directly to the stringKeys array
             elements.sort(Comparator.comparing(keyExtractor));
@@ -362,13 +364,13 @@ public class Manager {
      * @return An array of Order objects
      */
     public Order[] searchOrdersByDate(String lower, String upper) {
-        upper = formatStringForSearch(upper, true);
+        upper = formatStringForSearch(upper, false);
         return searchElementsByStrings(orders, lower, upper, false, Order::getDATE);
     }
 
     private String formatStringForSearch(String upper, boolean inverse) {
         char original = upper.charAt(0);
-        int newAscii = inverse ? 1 + (int) original : 1 - (int) original;
+        int newAscii = inverse ? 1 + (int) original : (int) original - 1;
         char newChar = (char) newAscii;
         if (upper.length() > 1) {
             upper = "" + newChar + upper.subSequence(1, upper.length());
