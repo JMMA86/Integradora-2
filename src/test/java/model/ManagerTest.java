@@ -96,13 +96,25 @@ public class ManagerTest {
     // Add Product Testing
 
     @Test
-    void addSingleProduct() {
+    void addSingleProductEmptyList() {
         try {
             manager.addProduct("Sports Ball", "A ball...for sports", 10.5, 50, 8,40);
         } catch(DuplicatedElementException e ) {
             e.printStackTrace();
         }
         assertEquals(manager.getProducts().size(), 1);
+    }
+
+    @Test
+    void addSingleProductNonEmptyList() {
+        setupInitializeMultipleProducts();
+        int initialAmount = manager.getProducts().size();
+        try {
+            manager.addProduct("Sports Ball", "A ball...for sports", 10.5, 50, 8,40);
+        } catch(DuplicatedElementException e ) {
+            e.printStackTrace();
+        }
+        assertEquals(manager.getProducts().size(), initialAmount+1);
     }
 
     @Test
@@ -172,6 +184,11 @@ public class ManagerTest {
     }
 
     @Test
+    void searchSingleProductByNameNotFound() {
+        assertThrows(IndexOutOfBoundsException.class, () -> manager.searchProduct(manager.getProducts().get(0).getName()));
+    }
+
+    @Test
     void searchProductsByPrice() {
         setupInitializeMultipleProducts();
 
@@ -197,6 +214,13 @@ public class ManagerTest {
 
         // assertion
         assertEquals(output.length, foundProducts.size());
+    }
+
+    @Test
+    void searchProductsByPriceInvalidPrice() {
+        setupInitializeMultipleProducts();
+        double lower = -50.2, upper = 100.2;
+        assertThrows(IllegalArgumentException.class, () -> manager.searchProductByPrice(lower, upper));
     }
 
     @Test
@@ -229,6 +253,13 @@ public class ManagerTest {
     }
 
     @Test
+    void searchProductsByPriceInvalidCategories() {
+        setupInitializeMultipleProducts();
+        int lower = -1, upper = 4;
+        assertThrows(IndexOutOfBoundsException.class, () -> manager.searchProductsByCategory(ProductCategory.values()[lower], ProductCategory.values()[upper]));
+    }
+
+    @Test
     void searchProductByStock() {
         setupInitializeMultipleProducts();
 
@@ -255,6 +286,13 @@ public class ManagerTest {
 
         // assertion
         assertEquals(output.length, foundProducts.size());
+    }
+
+    @Test
+    void searchProductsByPriceNegativeStock() {
+        setupInitializeMultipleProducts();
+        int lower = -50, upper = -5;
+        assertThrows(IllegalArgumentException.class, () -> manager.searchProductByAmount(lower, upper));
     }
 
     @Test
@@ -287,6 +325,13 @@ public class ManagerTest {
     }
 
     @Test
+    void searchProductsByPriceNegativeTimesBought() {
+        setupInitializeMultipleProducts();
+        int lower = -50, upper = -5;
+        assertThrows(IllegalArgumentException.class, () -> manager.searchProductsByTimesBought(lower, upper));
+    }
+
+    @Test
     void searchProductByPrefix() {
         setupInitializeMultipleProducts();
 
@@ -316,6 +361,14 @@ public class ManagerTest {
     }
 
     @Test
+    void searchProductByPrefixNotFoundElements() {
+        setupInitializeMultipleProducts();
+        String prefix = "Zh";
+        Product[] output = manager.searchProductsByStrings(prefix, "Zi", false);
+        assertEquals(output.length, 0);
+    }
+
+    @Test
     void searchProductBySuffix() {
         setupInitializeMultipleProducts();
 
@@ -342,6 +395,14 @@ public class ManagerTest {
 
         // assertion
         assertEquals(foundProducts.size(), output.length);
+    }
+
+    @Test
+    void searchProductBySuffixNotFoundElements() {
+        setupInitializeMultipleProducts();
+        String prefix = "ni";
+        Product[] output = manager.searchProductsByStrings(prefix, "oi", true);
+        assertEquals(output.length, 0);
     }
 
     // Search Order testing
@@ -375,6 +436,13 @@ public class ManagerTest {
         assertEquals(foundOrders.size(), output.length);
     }
 
+    @Test
+    void searchOrderByPrefixNotFoundElements() {
+        setupInitializeMultipleOrders();
+        String prefix = "Tf";
+        assertThrows(NoSuchElementException.class, () -> manager.searchOrdersByCustomersNames(prefix, "Tg", false));
+    }
+
 
     @Test
     void searchOrderByNameSuffix() {
@@ -404,6 +472,16 @@ public class ManagerTest {
         // assertion
         assertEquals(foundOrders.size(), output.length);
     }
+
+    @Test
+    void searchOrderBySuffixNotFoundElements() {
+        setupInitializeMultipleOrders();
+        String suffix = "aer";
+        Order[] output = manager.searchOrdersByCustomersNames(suffix, "ber", true);
+        assertEquals(output.length, 0);
+    }
+
+
 
     @Test
     void searchOrderByDate() {
@@ -463,6 +541,30 @@ public class ManagerTest {
         assertEquals(output.length, foundOrders.size());
     }
 
+    @Test
+    void searchOrderByTotalPriceInvalidPrice() {
+        setupInitializeMultipleOrders();
+        double lower = -80.2, upper = 200.2;
+        assertThrows(IllegalArgumentException.class, () ->  manager.searchOrdersByTotalPrice(lower, upper));
+    }
+
+    // Increase product testing
+
+    @Test
+    void increaseProductStockValidValue() {
+        setupInitializeMultipleProducts();
+        Product p = manager.getProducts().get(0);
+        int initialStock = p.getAmount();
+        manager.increaseProductStock(p, 10);
+        assertEquals(p.getAmount(), initialStock + 10);
+    }
+
+    @Test
+    void increaseProductStockInvalidValue() {
+        setupInitializeMultipleProducts();
+        Product p = manager.getProducts().get(0);
+        assertThrows(IllegalArgumentException.class, () -> manager.increaseProductStock(p, -10)  );
+    }
 
     // Export to Json Testing
 

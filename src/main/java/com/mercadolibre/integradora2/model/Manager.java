@@ -64,6 +64,11 @@ public class Manager {
         return msj;
     }
 
+    public void increaseProductStock(Product product, int sum) throws IllegalArgumentException {
+        if(sum <= 0) throw new IllegalArgumentException("The given value should be greater than 0");
+        product.setAmount(product.getAmount()+sum);
+    }
+
     /**
      * This method saves products and orders data to JSON files in the project "data" folder.
      * It will allow persistence in the system use.
@@ -129,6 +134,7 @@ public class Manager {
      * @return A list with the products that matches those elements.
      */
     public Product[] searchProductByAmount(int lower, int upper) throws NoSuchElementException {
+        if(lower < 0 || upper < 0) throw new IllegalArgumentException("Stock cannot be negative");
         return integerSearchControl(
                 lower,
                 upper,
@@ -250,6 +256,7 @@ public class Manager {
      * @return A list with the products between those ranges
      */
     public Product[] searchProductByPrice(double lower, double upper) throws NoSuchElementException {
+        if(lower < 0 || upper < 0) throw new IllegalArgumentException("Prices cannot be less than 0");
         return searchElementsByDoubles(products, lower, upper, Product::getPrice);
     }
 
@@ -287,6 +294,7 @@ public class Manager {
      *                                or when the upper limit is smaller than the smaller times bought in products.
      */
     public Product[] searchProductsByTimesBought(int lower, int upper) throws NoSuchElementException {
+        if(lower < 0 || upper < 0) throw new IllegalArgumentException("Times bought cannot be negative");
         return integerSearchControl(
                 lower,
                 upper,
@@ -343,6 +351,7 @@ public class Manager {
      *                                characteristics
      */
     public Order[] searchOrdersByTotalPrice(double lower, double upper) throws NoSuchElementException {
+        if(lower < 0 || upper < 0) throw new IllegalArgumentException("Prices cannot be negative");
         return searchElementsByDoubles(orders, lower, upper, Order::getTotalPrice);
     }
 
