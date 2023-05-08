@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="360.0" prefWidth="520.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mercadolibre.integradora2.controller.AddProductController">
+    <VBox spacing="15">
+        <HBox alignment="CENTER" spacing="10">
+            <VBox>
+                <Label text="Name:" />
+                <TextField fx:id="nameField" maxWidth="240" prefWidth="240" onKeyTyped="#updateAddBtn"/>
+            </VBox>
+            <VBox>
+                <Label text="Price:" />
+                <TextField fx:id="priceField" maxWidth="120" prefWidth="120" onKeyTyped="#updateAddBtn"/>
+            </VBox>
+            <VBox>
+                <Label text="Amount:" />
+                <TextField fx:id="amountField" maxWidth="120" prefWidth="120" onKeyTyped="#updateAddBtn"/>
+            </VBox>
+        </HBox>
+        <VBox spacing="10">
+            <Label text="Description:" />
+            <TextArea fx:id="descriptionArea" maxWidth="500" prefHeight="100" prefWidth="500" onKeyTyped="#updateAddBtn"/>
+            <Label text="Category" />
+            <HBox alignment="CENTER" spacing="30">
+                <VBox spacing="10">
+                    <RadioButton fx:id="books" mnemonicParsing="false" text="Books" onAction="#setCategory" >
+                  <toggleGroup>
+                     <ToggleGroup fx:id="categoryGroup" />
+                  </toggleGroup></RadioButton>
+                    <RadioButton fx:id="food" mnemonicParsing="false" text="Food and Drinks" toggleGroup="$categoryGroup" onAction="#setCategory" />
+                    <RadioButton fx:id="care" mnemonicParsing="false" text="Personal Care" toggleGroup="$categoryGroup" onAction="#setCategory" />
+                </VBox>
+                <VBox spacing="10">
+                    <RadioButton fx:id="electronics" mnemonicParsing="false" text="Electronics" toggleGroup="$categoryGroup" onAction="#setCategory" />
+                    <RadioButton fx:id="stationery" mnemonicParsing="false" text="Stationery" toggleGroup="$categoryGroup" onAction="#setCategory" />
+                    <RadioButton fx:id="games" mnemonicParsing="false" text="Toys/games" toggleGroup="$categoryGroup" onAction="#setCategory" />
+                </VBox>
+                <VBox spacing="10">
+                    <RadioButton fx:id="clothes" mnemonicParsing="false" text="Clothes/Accessories" toggleGroup="$categoryGroup" onAction="#setCategory" />
+                    <RadioButton fx:id="sports" mnemonicParsing="false" text="Sports" toggleGroup="$categoryGroup" onAction="#setCategory" />
+                </VBox>
+            </HBox>
+        </VBox>
+        <HBox alignment="CENTER" spacing="10">
+            <Button fx:id="addProductBtn" text="Add Product" disable="true" onAction="#AddProduct"/>
+            <Button fx:id="cancelBtn" text="Cancel" onAction="#cancel"/>
+        </HBox>
+        <padding>
+           <Insets left="10.0" />
+        </padding>
+    </VBox>
+</AnchorPane>
