@@ -130,6 +130,8 @@ public class SearchController implements Initializable {
     }
     @FXML
     public void searchProduct() {
+        productTable.setItems(null);
+        orderTable.setItems(null);
         if (higherValueField.getText().compareTo(lowerValueField.getText()) < 0) {
             MainApplication.showAlert("Error", "Invalid intervals.", Alert.AlertType.ERROR);
             return;
@@ -192,7 +194,7 @@ public class SearchController implements Initializable {
                 }
                 return;
             }
-            if (namePrefixRB.isSelected()) {
+            if (nameSuffixRB.isSelected()) {
                 try {
                     result = FXCollections.observableArrayList(new ArrayList<>(Arrays.asList(MainApplication.getManager().searchProductsByStrings(lowerValueField.getText(), higherValueField.getText(), true))));
                     if (orderSelector.getValue().equals("Descending Order")) {
