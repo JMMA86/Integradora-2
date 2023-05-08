@@ -76,7 +76,7 @@ public class AddOrderController implements Initializable {
             MainApplication.showAlert("Log info", "Added correctly", Alert.AlertType.INFORMATION);
             //Set new stock
             this.product.setAmount(this.product.getAmount() - amountProduct.getValue());
-            this.product.setTimesBought(this.product.getTimesBought() + 1);
+            this.product.setTimesBought(this.product.getTimesBought() + amountProduct.getValue());
             products.add(new Product(this.product.getName(), this.product.getDescription(), this.product.getPrice() * amountProduct.getValue(), amountProduct.getValue(), this.product.getCategory(), this.product.getTimesBought()));
             productsTable.setItems(products);
             //Set new totalPrice

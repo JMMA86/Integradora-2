@@ -9,6 +9,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import java.net.URL;
@@ -277,6 +278,16 @@ public class SearchController implements Initializable {
     //Default values
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        //Initialize columns of productSearcher
+        nameProduct.setCellValueFactory(new PropertyValueFactory<>("name"));
+        stockProduct.setCellValueFactory(new PropertyValueFactory<>("amount"));
+        categoryProduct.setCellValueFactory(new PropertyValueFactory<>("category"));
+        priceProduct.setCellValueFactory(new PropertyValueFactory<>("price"));
+        boughtProduct.setCellValueFactory(new PropertyValueFactory<>("timesBought"));
+        //Initialize columns of orderSearcher
+        costumerOrder.setCellValueFactory(new PropertyValueFactory<>("customerName"));
+        priceOrder.setCellValueFactory(new PropertyValueFactory<>("totalPrice"));
+        dateOrder.setCellValueFactory(new PropertyValueFactory<>("DATE"));
         //Initialize product selector and ascending order (including all options)
         ObservableList<String> listSearcherSelector = FXCollections.observableArrayList("Product Searcher", "Order Searcher");
         searcherSelector.setItems(listSearcherSelector);
