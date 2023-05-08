@@ -28,36 +28,37 @@ public class Searcher<T extends Comparable<T>, E> {
 
         //If the first element coincides with the last element in an ordered array it means that all the
         //elements are the same length, which means that we'll have to return all the elements
-        if (lt.equals(rt) && arr[0].equals(lt) && arr[arr.length - 1].equals(rt)) {
-            return elements;
+        if (lt.equals(rt) && arr[0].equals(lt) && arr[arr.length - 1].equals(rt)) return elements;
+
+        int l_approx = binarySearch(arr, lt, 0, arr.length - 1, true);
+
+        if (l_approx >= arr.length) throw new NoSuchElementException("The element was not found");
+
+        if (arr[l_approx].compareTo(lt) >= 0) {
+            xl = l_approx;
         } else {
-            int l_approx = binarySearch(arr, lt, 0, arr.length - 1, true);
+            xl = l_approx + 1;
+        }
 
-            if (l_approx >= arr.length) throw new NoSuchElementException("The element was not found");
+        for (int i = xl; i >= 0 && arr[i].compareTo(lt) == 0; i--) {
+            xl = i;
+        }
 
-            if (arr[l_approx].compareTo(lt) >= 0) {
-                if (l_approx > 0 && arr[l_approx - 1].compareTo(lt) >= 0) {
-                    xl = l_approx - 1;
-                } else {
-                    xl = l_approx;
-                }
-            } else {
-                xl = l_approx + 1;
-            }
+        int r_approx = binarySearch(arr, rt, xl, arr.length - 1, true);
 
-            int r_approx = binarySearch(arr, rt, xl, arr.length - 1, true);
 
-            if (r_approx >= arr.length) throw new NoSuchElementException("The element was not found");
+        // if (r_approx > arr.length) throw new NoSuchElementException("The element was not found");
+        if (r_approx >= arr.length) r_approx = arr.length-1;
 
-            if (rt.compareTo(arr[r_approx]) <= 0) {
-                if (r_approx < arr.length - 1 && rt.compareTo(arr[r_approx + 1]) <= 0) {
-                    xr = r_approx + 1;
-                } else {
-                    xr = r_approx;
-                }
-            } else {
-                xr = r_approx - 1;
-            }
+        if (rt.compareTo(arr[r_approx]) >= 0) {
+            xr = r_approx;
+        } else {
+            xr = r_approx - 1;
+        }
+
+        //If a single element is found and we haven't met the limit that matches
+        for (int i = xr; i < arr.length && arr[i].compareTo(rt) == 0; i++) {
+            xr = i;
         }
 
         ArrayList<E> result = new ArrayList<>();
