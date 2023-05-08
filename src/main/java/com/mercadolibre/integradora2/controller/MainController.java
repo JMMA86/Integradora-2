@@ -8,12 +8,11 @@ import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
 public class MainController {
-    private final Manager manager = new Manager();
     @FXML
     private Button startSystemBtn;
 
     @FXML
-    protected void onStartBtn() {
+    public void onStartBtn() {
         Stage stage = (Stage) startSystemBtn.getScene().getWindow();
         stage.close();
         String msj = MainApplication.getManager().readData();

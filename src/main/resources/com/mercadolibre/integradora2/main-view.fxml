@@ -13,7 +13,7 @@
     <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
         <Image url="@../../../images/mercadolibre_logo.png"/>
     </ImageView>
-    <Label fx:id="welcomeText" text="Management System">
+    <Label text="Management System">
       <font>
          <Font name="System Bold" size="12.0" />
       </font></Label>

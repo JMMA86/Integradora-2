@@ -1,5 +1,7 @@
 package com.mercadolibre.integradora2.model;
 
+import java.util.Locale;
+
 public class Product {
     private String name;
     private String description;
@@ -8,7 +10,7 @@ public class Product {
     private ProductCategory category;
     private int timesBought;
 
-    public Product(String name, String description, double price, int amount, int category, int timesBought) throws IndexOutOfBoundsException {
+    public Product(String name, String description, double price, int amount, int category, int timesBought) {
         this.name = name;
         this.description = description;
         if(price < 0 || amount < 0 || timesBought < 0) {
@@ -17,12 +19,17 @@ public class Product {
             this.timesBought = timesBought;
             this.price = price;
             this.amount = amount;
-        }
-        if(category < 1 || category > ProductCategory.values().length) {
-            throw new IndexOutOfBoundsException("The category must be in the specified range");
-        } else {
             this.category = ProductCategory.values()[category-1];
         }
+    }
+
+    public Product(String name, String description, double price, int amount, ProductCategory category, int timesBought) {
+        this.name = name;
+        this.description = description;
+        this.timesBought = timesBought;
+        this.price = price;
+        this.amount = amount;
+        this.category = category;
     }
 
     public String getName() {
@@ -71,5 +78,14 @@ public class Product {
 
     public void setTimesBought(int timesBought) {
         this.timesBought = timesBought;
+    }
+
+    public String toString() {
+        StringBuilder category = new StringBuilder();
+        String[] words = this.category.name().toLowerCase().split("_");
+        for (String word : words) {
+            category.append(word.substring(0, 1).toUpperCase() + word.substring(1) + " ");
+        }
+        return name + "\n- Price: " + price + "\n- Amount: " + amount + "\n- Category: " + category + "\n- Description: " + description;
     }
 }
