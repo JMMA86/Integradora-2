@@ -110,3 +110,16 @@ __Failure density:__ 0/18 = 0.0
 __Reliability:__ 1 - 0.0 = 1.0
 
 __Completeness:__ 18/7 = 2.57
+
+---
+
+### __Iteration 9__
+
+__Commit:__ 53dff56
+
+__Failure density:__ 0/22 = 0.0
+
+__Reliability:__ 1 - 0.0 = 1.0
+
+__Completeness:__ 22/7 = 3.14
+
